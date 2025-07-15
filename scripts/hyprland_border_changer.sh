@@ -9,7 +9,7 @@ OPACITY="ee"
 BRIGHTNESS_DIFF_THRESHOLD=15
 
 # Check dependencies
-for cmd in wal jq awk bc sed hyprctl; do
+for cmd in wal jq awk sed hyprctl bc; do
   command -v "$cmd" >/dev/null 2>&1 || { echo "Error: $cmd is not installed."; exit 1; }
 done
 
@@ -74,3 +74,21 @@ rgb_string="$r, $g, $b"
 sed "s/__BUTTON_ACCENT__/${rgb_string}/g" "$TEMPLATE" > "$OUTPUT"
 
 echo "Wlogout CSS updated with RGB color: $rgb_string"
+
+hex_with_opacity() {
+  local hex="${1//#/}"
+  local opacity="$2"
+  echo "${hex}${opacity}"
+}
+
+color1_opacity=$(hex_with_opacity "$color1" "$OPACITY")
+color2_opacity=$(hex_with_opacity "$color2" "$OPACITY")
+
+conf_content="general {
+  col.active_border = rgba(${color1_opacity}) rgba(${color2_opacity}) 45deg
+}"
+
+echo "$conf_content" > "$HYPR_CONF"
+
+hyprctl reload
+echo "Hyprland dynamic border configuration aggiornata nel file: $HYPR_CONF"
