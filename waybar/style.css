@@ -17,7 +17,7 @@ window#waybar.empty #window {
 }
 
 tooltip {
-  background: #10181b;
+  background: rgba(2, 0, 7, 0.80);
   opacity: 0.8;
   border-radius: 10px;
   border-width: 2px;
@@ -57,7 +57,7 @@ tooltip label {
   border-radius: 10px;
 }
 
-#custom-launch_wofi,
+#custom-launch_rofi,
 #custom-lock_screen,
 #custom-power_btn,
 #custom-power_profile,
@@ -76,7 +76,7 @@ tooltip label {
 #workspaces,
 #backlight,
 #keyboard-state label.locked {
-  background: #10181b;
+  background: rgba(2, 0, 7, 0.80);
   opacity: 0.8;
   padding: 0px 10px;
   margin: 3px 0px;
@@ -88,7 +88,7 @@ tooltip label {
 #custom-lock_screen,
 #temperature,
 #backlight,
-#custom-launch_wofi,
+#custom-launch_rofi,
 #cpu {
   border-radius: 10px 0px 0px 10px;
 }
@@ -137,8 +137,8 @@ tooltip label {
   margin-right: 20px;
 }
 
-#custom-launch_wofi {
-  color: #89b4fa;
+#custom-launch_rofi {
+  color: rgba(249, 223, 176, 1.00);
   margin-left: 10px;
   border-right: 0px;
 }

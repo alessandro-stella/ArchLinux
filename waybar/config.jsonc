@@ -7,7 +7,7 @@
   "gtk-layer-shell": true,
   "height": 50,
   "modules-left": [
-    "custom/launch_wofi",
+    "custom/launch_rofi",
     "hyprland/workspaces",
     "cpu",
     "memory",
@@ -33,9 +33,9 @@
   "hyprland/window": {
     "format": "{}"
   },
-  "custom/launch_wofi": {
+  "custom/launch_rofi": {
     "format": "",
-    "on-click": "pkill wofi; wofi -n",
+    "on-click": "pkill rofi; rofi -show drun",
     "tooltip": false
   },
   "custom/lock_screen": {

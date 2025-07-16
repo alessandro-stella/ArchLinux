@@ -1,0 +1,14 @@
+[general]
+backend = "kmeans"
+colorspace = "lch"
+palette = "dark16"
+
+[templates]
+# NOTE: prefer '' over "" for paths, avoids escaping.
+# template: A RELATIVE path that points to `~/.config/wallust/template` (depends on platform)
+# target: ABSOLUTE path in which to place a file with generated templated values.
+# ¡ If either one is a directory, then both SHOULD be one. !
+# zathura = { template = 'zathura', target = '~/.config/zathura/zathurarc' }
+palette = { template = "paletteTemplate.json.j2", target = "~/.cache/wallust/colors.json" }
+kitty = { template = "kittyTemplate.json.j2", target = "~/.cache/wallust/colors-kitty.conf" }
+rofi = { template = "rofiTemplate.json.j2", target = "~/.cache/wallust/colors-rofi.rasi" }
