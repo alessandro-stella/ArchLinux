@@ -82,7 +82,7 @@
           },
           "leading_diamond": "",
           "trailing_diamond": "",
-          "template": " ({{ url .UpstreamIcon .UpstreamURL }} {{ url .HEAD .UpstreamURL }}){{ if gt .Ahead 0 }}<#50fa7b> +{{ .Ahead }}</>{{ end }}{{ if gt .Behind 0 }}<#ff5555> -{{ .Behind }}</>{{ end }}{{ if .Working.Changed }}<p:color0>  {{ .Working.String }}</>{{ end }}{{ if .Staging.Changed }}<p:color0>  {{ .Staging.String }}</>{{ end }}",
+          "template": " ({{ url .UpstreamIcon .UpstreamURL }} {{ url .HEAD .UpstreamURL }}){{ if gt .Ahead 0 }}<p:color0> +{{ .Ahead }}</>{{ end }}{{ if gt .Behind 0 }}<p:color0> -{{ .Behind }}</>{{ end }}{{ if .Working.Changed }}<p:color0>  {{ .Working.String }}</>{{ end }}{{ if .Staging.Changed }}<p:color0>  {{ .Staging.String }}</>{{ end }}",
           "foreground": "p:color0",
           "background": "p:color13",
           "type": "git",
