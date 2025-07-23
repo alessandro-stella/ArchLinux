@@ -133,6 +133,9 @@ echo "✅ Wlogout CSS updated with RGB color: $rgb_string"
 # --- WAYBAR ---
 "$(dirname "$0")/waybar_changer.sh" "$color1"
 
+# --- OH-MY-POSH ---
+"$(dirname "$0")/oh_my_posh_changer.sh"
+
 # --- HYPRLAND ---
 hex_with_opacity() {
   local hex="${1//#/}"
