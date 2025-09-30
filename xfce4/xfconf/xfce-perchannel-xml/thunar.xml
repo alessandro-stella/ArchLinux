@@ -8,4 +8,5 @@
   <property name="last-details-view-column-widths" type="string" value="50,50,132,50,50,420,50,50,395,50,50,78,50,263"/>
   <property name="last-window-maximized" type="bool" value="true"/>
   <property name="last-show-hidden" type="bool" value="false"/>
+  <property name="last-renamer-dialog-maximized" type="bool" value="true"/>
 </channel>
