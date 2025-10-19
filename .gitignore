@@ -15,6 +15,7 @@ swi-prolog
 dconf
 
 /hypr/dynamic-border.conf
+/hypr/monitor-setup.conf
 /wallpaper
 /wlogout/style.css
 /waybar/style.css
