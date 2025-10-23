@@ -20,8 +20,14 @@ esac
 
 # If the parameter is "update", update all services
 if [ "$1" = "update" ]; then
-    kitty --title update-sys sh -c 'yay -Syu --answerdiff N --answerclean N'
+    # Default call
     # kitty --title update-sys sh -c 'yay -Syu'
+    
+    # Automatic "no" too diff and clean
+    # kitty --title update-sys sh -c 'yay -Syu --answerdiff N --answerclean N'
+    
+    # Automatic "yes" to normal installation
+    kitty --title update-sys sh -c 'yes | yay -Syu --answerdiff N --answerclean N'
 fi
 
 # If there aren't any parameters, return the total number of updates
