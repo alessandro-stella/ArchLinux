@@ -4,7 +4,7 @@
 }
 
 window {
-  background-image: url("/home/alessandro/.config/wallpaper/blurredWallpaper.png");
+  background-image: url("../wallpaper/blurredWallpaper.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -44,25 +44,25 @@ label {
 }
 
 #hibernate {
-  background-image: url("/home/alessandro/.config/wlogout/icons/hibernate.svg");
+  background-image: url("./icons/hibernate.svg");
 }
 
 #lock {
-  background-image: url("/home/alessandro/.config/wlogout/icons/lock.svg");
+  background-image: url("./icons/lock.svg");
 }
 
 #logout {
-  background-image: url("/home/alessandro/.config/wlogout/icons/logout.svg");
+  background-image: url("./icons/logout.svg");
 }
 
 #reboot {
-  background-image: url("/home/alessandro/.config/wlogout/icons/reboot.svg");
+  background-image: url("./icons/reboot.svg");
 }
 
 #shutdown {
-  background-image: url("/home/alessandro/.config/wlogout/icons/shutdown.svg");
+  background-image: url("./icons/shutdown.svg");
 }
 
 #suspend {
-  background-image: url("/home/alessandro/.config/wlogout/icons/suspend.svg");
+  background-image: url("./icons/suspend.svg");
 }

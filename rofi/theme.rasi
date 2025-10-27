@@ -14,7 +14,7 @@ configuration {
 }
 
 /* ---- Load wal colors ---- */
-@theme "/home/alessandro/.cache/wallust/colors-rofi.rasi"
+@theme "~/.cache/wallust/colors-rofi.rasi"
 
 /* ---- Global Properties ---- */
 * {
