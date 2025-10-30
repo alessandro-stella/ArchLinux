@@ -13,7 +13,7 @@ indicator-thickness=12
 # Default colors
 ring-color=#e0def4
 line-color=#00000000
-inside-color=#00000000
+inside-color=#00000040
 text-color=#e0def4
 key-hl-color=#6b6780
 separator-color=#00000000
@@ -21,19 +21,19 @@ separator-color=#00000000
 # Verifying password
 ring-ver-color=#6b6780
 line-ver-color=#00000000
-inside-ver-color=#00000000
+inside-ver-color=#00000040
 text-ver-color=#e0def4
 
 # Wrong password
 ring-wrong-color=#e92d4d
 line-wrong-color=#00000000
-inside-wrong-color=#00000000
+inside-wrong-color=#00000040
 text-wrong-color=#e92d4d
 
 # Clear
 ring-clear-color=#9ccfd8
 line-clear-color=#00000000
-inside-clear-color=#00000000
+inside-clear-color=#00000040
 text-clear-color=#e0def4
 bs-hl-color=#9ccfd8
 
