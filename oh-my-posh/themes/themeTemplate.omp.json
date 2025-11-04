@@ -82,9 +82,9 @@
           },
           "leading_diamond": "",
           "trailing_diamond": "",
-          "template": " ({{ url .UpstreamIcon .UpstreamURL }} {{ url .HEAD .UpstreamURL }}){{ if gt .Ahead 0 }}<p:color0> +{{ .Ahead }}</>{{ end }}{{ if gt .Behind 0 }}<p:color0> -{{ .Behind }}</>{{ end }}{{ if .Working.Changed }}<p:color0>  {{ .Working.String }}</>{{ end }}{{ if .Staging.Changed }}<p:color0>  {{ .Staging.String }}</>{{ end }}",
-          "foreground": "p:color0",
-          "background": "p:color13",
+          "template": " ({{ url .UpstreamIcon .UpstreamURL }} {{ url .HEAD .UpstreamURL }}){{ if gt .Ahead 0 }}<#FFFFFF> +{{ .Ahead }}</>{{ end }}{{ if gt .Behind 0 }}<#FFFFFF> -{{ .Behind }}</>{{ end }}{{ if .Working.Changed }}<#FFFFFF>  {{ .Working.String }}</>{{ end }}{{ if .Staging.Changed }}<#FFFFFF>  {{ .Staging.String }}</>{{ end }}",
+          "foreground": "#FFFFFF",
+          "background": "#F05032",
           "type": "git",
           "style": "diamond"
         },
@@ -92,8 +92,8 @@
           "leading_diamond": "",
           "trailing_diamond": "",
           "template": " {{ .Full }}",
-          "foreground": "p:color0",
-          "background": "#50fa7b",
+          "foreground": "#FFFFFF",
+          "background": "#339933",
           "type": "node",
           "style": "diamond"
         },
@@ -107,8 +107,8 @@
           "leading_diamond": "",
           "trailing_diamond": "",
           "template": " {{ .Full }}",
-          "foreground": "p:color15",
-          "background": "#ff5555",
+          "foreground": "#FFFFFF",
+          "background": "#CB3837",
           "type": "npm",
           "style": "diamond"
         },
@@ -122,8 +122,8 @@
           "leading_diamond": "",
           "trailing_diamond": "",
           "template": "󰋁 {{ .full }}",
-          "foreground": "p:color15",
-          "background": "#ffb86c",
+          "foreground": "#FFFFFF",
+          "background": "#F69220",
           "type": "pnpm",
           "style": "diamond"
         },
@@ -134,8 +134,8 @@
           "leading_diamond": "",
           "trailing_diamond": "",
           "template": " {{ .Full }}",
-          "foreground": "p:color0",
-          "background": "#50fa7b",
+          "foreground": "#FFFFFF",
+          "background": "#3776AB",
           "type": "python",
           "style": "diamond"
         },
@@ -143,8 +143,8 @@
           "leading_diamond": "",
           "trailing_diamond": "",
           "template": " {{ .Full }}",
-          "foreground": "p:color15",
-          "background": "#ff79c6",
+          "foreground": "#FFFFFF",
+          "background": "#5382A1",
           "type": "java",
           "style": "diamond"
         },
@@ -152,8 +152,8 @@
           "leading_diamond": "",
           "trailing_diamond": "",
           "template": " {{ .Full }}",
-          "foreground": "p:color15",
-          "background": "#6272a4",
+          "foreground": "#FFFFFF",
+          "background": "#777BB4",
           "type": "php",
           "style": "diamond"
         }
