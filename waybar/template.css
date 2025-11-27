@@ -18,8 +18,7 @@ window#waybar.empty #window {
 
 tooltip {
   background: __BACKGROUND_COLOR__;
-  opacity: 0.8;
-  border-radius: 10px;
+  border-radius: 7px;
   border-width: 2px;
   border-style: solid;
   border-color: #11111b;
@@ -42,19 +41,19 @@ tooltip label {
 #workspaces button.focused {
   color: #a6adc8;
   background: #eba0ac;
-  border-radius: 10px;
+  border-radius: 7px;
 }
 
 #workspaces button.urgent {
   color: #11111b;
   background: #a6e3a1;
-  border-radius: 10px;
+  border-radius: 7px;
 }
 
 #workspaces button:hover {
   background: #11111b;
   color: #cdd6f4;
-  border-radius: 10px;
+  border-radius: 7px;
 }
 
 #custom-launch_rofi,
@@ -89,11 +88,11 @@ tooltip label {
 #backlight,
 #custom-launch_rofi,
 #cpu {
-  border-radius: 10px 0px 0px 10px;
+  border-radius: 7px 0px 0px 7px;
 }
 
 #tray {
-  border-radius: 10px;
+  border-radius: 7px;
   padding-left: 10px;
   margin-right: 10px;
 }
@@ -103,7 +102,7 @@ tooltip label {
 #pulseaudio.microphone,
 #battery,
 #disk {
-  border-radius: 0px 10px 10px 0px;
+  border-radius: 0px 7px 7px 0px;
   margin-right: 10px;
 }
 
@@ -131,7 +130,7 @@ tooltip label {
 }
 
 #window {
-  border-radius: 10px;
+  border-radius: 7px;
   margin-left: 0px;
   margin-right: 20px;
 }
@@ -160,10 +159,10 @@ tooltip label {
 }
 
 #keyboard-state {
-  border-radius: 10px;
+  border-radius: 7px;
 }
 
 #keyboard-state label.locked {
   margin-right: 10px;
-  border-radius: 10px;
+  border-radius: 7px;
 }

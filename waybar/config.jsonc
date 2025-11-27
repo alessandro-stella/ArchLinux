@@ -5,7 +5,7 @@
   "exclusive": true,
   "passthrough": false,
   "gtk-layer-shell": true,
-  "height": 50,
+  "height": 45,
   "modules-left": [
     "custom/launch_rofi",
     "hyprland/workspaces",
