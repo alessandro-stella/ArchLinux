@@ -14,7 +14,17 @@ go
 swi-prolog
 dconf
 Electron
+pulse
+hardhat-nodejs
+nextjs-nodejs
+Thunar
+xfce4
+xsettingsd
 
+/code-flags.conf
+/user-dirs.dirs
+/trashrc
+/mimeapps.list
 /hypr/dynamic-border.conf
 /hypr/monitor-setup.conf
 /wallpaper
