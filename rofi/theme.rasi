@@ -65,7 +65,7 @@ inputbar {
     border-radius:               20px;
     orientation:                 horizontal;
     children:                    ["entry", "dummy" ];
-    background-image:            url("~/.config/wallpaper/currentWallpaper.png", width);
+    background-image:            url("~/.config/wallpaper/current_wallpaper.png", width);
 }
 
 /* ---- Entry input ---- */

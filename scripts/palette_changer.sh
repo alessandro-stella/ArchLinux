@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WALLPAPER="$HOME/.config/wallpaper/currentWallpaper.png"
+WALLPAPER="$HOME/.config/wallpaper/current_wallpaper.png"
 WAL_COLORS_JSON="$HOME/.cache/wallust/colors.json"
 HYPR_CONF="$HOME/.config/hypr/dynamic-border.conf"
 TEMPLATE="$HOME/.config/wlogout/template.css"

@@ -3,7 +3,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-wallpaper_dir="$HOME/Pictures/wallpapers"
+wallpaper_dir="$HOME/Pictures/wallpapers/thumbnails"
 cache_dir="$HOME/.cache/wallpaper_rofi"
 gif_cache_dir="$HOME/.cache/gif_preview"
 video_cache_dir="$HOME/.cache/video_preview"
@@ -41,39 +41,18 @@ check_cache() {
 }
 
 generate_menu() {
-  mapfile -t PICS < "$cache_list"
+    mapfile -t PICS < "$cache_list"
 
-  for pic_path in "${PICS[@]}"; do
-    pic_name=$(basename "$pic_path")
-    ext="${pic_name##*.}"
-    ext="${ext,,}"  # lowercase
-
-    case "$ext" in
-      gif)
-        cache_gif_image="$gif_cache_dir/${pic_name}.png"
-        if [[ ! -f "$cache_gif_image" ]]; then
-          magick "$pic_path[0]" -resize 320x180 "$cache_gif_image"
-        fi
-        printf "%s\x00icon\x1f%s\n" "$pic_name" "$cache_gif_image"
-        ;;
-      mp4|mkv|mov|webm)
-        cache_preview_image="$video_cache_dir/${pic_name}.png"
-        if [[ ! -f "$cache_preview_image" ]]; then
-          ffmpeg -v error -y -i "$pic_path" -ss 00:00:01.000 -vframes 1 -vf "scale=320:-1" "$cache_preview_image"
-        fi
-        printf "%s\x00icon\x1f%s\n" "$pic_name" "$cache_preview_image"
-        ;;
-      jpg|jpeg|png)
-        # Filename without extension
+    for pic_path in "${PICS[@]}"; do
+        # Otteniamo il nome file (es. image.png)
+        pic_name=$(basename "$pic_path")
+        # Nome senza estensione per il display
         display_name="${pic_name%.*}"
+
+        # Dato che hai già tutto in thumbnails, passiamo direttamente il percorso
+        # Rofi è molto veloce se l'immagine è già piccola (es. 200-300px)
         printf "%s\x00icon\x1f%s\n" "$display_name" "$pic_path"
-        ;;
-      *)
-        # Unsupported extensions, text only without icon
-        printf "%s\n" "$pic_name"
-        ;;
-    esac
-  done
+    done
 }
 
 main() {
@@ -102,8 +81,9 @@ main() {
     done
 
     if [[ -f "$selected_file" ]]; then
-        notify-send -i "$selected_file" -u low 'Selected wallpaper:' "$(basename "$selected_file")"
-        "$(dirname "$0")/wallpaper_changer.sh" "$selected_file"
+        original_file="${selected_file/thumbnails\//}"
+        notify-send -i "$selected_file" -u low 'Selected wallpaper:' "$(basename "$original_file")"
+        "$(dirname "$0")/wallpaper_changer.sh" "$original_file"
     else
         notify-send -u low 'Selected wallpaper:' "$choice"
     fi
