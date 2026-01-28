@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
-USERNAME="utente123"
-PASSWORD="segreto"
-INSTALL_DIR="/opt/mio_programma"
+PACMAN_PACKAGES=("")
+YAY_PACKAGES=("")
+declare -A EXTERNAL_PACKAGES = (
+  ["oh-my-posh"]="curl -s https://ohmyposh.dev/install.sh | bash -s"
+)
