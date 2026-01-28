@@ -14,14 +14,24 @@ source ./config.sh
 cd "$HOME" || exit 1
 echo "Current working directory: $PWD"
 
-# Procedi con il clone di yay
-if [ ! -d "yay" ]; then
-    git clone https://aur.archlinux.org/yay.git
-else
-    echo "yay already cloned, proceeding with upgrade..."
+# Check yay
+if ! command -v yay >/dev/null 2>&1; then
+    echo "yay not found, proceeding with installation..."
+
+    # Cloning yay
+    if [ ! -d "yay" ]; then
+        git clone https://aur.archlinux.org/yay.git
+    else
+        echo "yay already cloned, updating..."
+        cd yay
+        git pull
+        cd ..
+    fi
+
+    # Building and installing
     cd yay
-    git pull
-    cd ..
+    makepkg -si --noconfirm
+    cd "$HOME"
 fi
 
 # Pacman packages
