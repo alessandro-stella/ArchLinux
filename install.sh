@@ -11,38 +11,55 @@ fi
 
 source ./config.sh
 
-echo "Pacchetti standard da installare:"
+cd "$HOME" || exit 1
+echo "Current working directory: $PWD"
+
+# Procedi con il clone di yay
+if [ ! -d "yay" ]; then
+    git clone https://aur.archlinux.org/yay.git
+else
+    echo "yay already cloned, proceeding with upgrade..."
+    cd yay
+    git pull
+    cd ..
+fi
+
+# Pacman packages
+echo "Pacman packages:"
 for pkg in "${PACKAGES[@]}"; do
     echo " - $pkg"
 done
 
+# Yay packages
+
+# External packages
 echo
-echo "Pacchetti esterni da installare:"
+echo "External packages to install:"
 for pkg in "${!EXTERNAL_PACKAGES[@]}"; do
     echo " - $pkg -> ${EXTERNAL_PACKAGES[$pkg]}"
 done
 
 echo
-# Chiedi conferma
-read -rp "Vuoi procedere con l'installazione? [y/N] " confirm
+# Ask confirm
+read -rp "Do you want to proceed with the installation? [y/N] " confirm
 confirm="${confirm,,}"  # lowercase
 
 if [[ "$confirm" != "y" ]]; then
-    echo "Installazione annullata."
+    echo "Installation aborted!"
     exit 0
 fi
 
-# Installazione pacchetti standard
+# Installing pacman packages
 for pkg in "${PACKAGES[@]}"; do
     echo "Installazione di $pkg..."
     sudo pacman -S --noconfirm "$pkg"
 done
 
-# Installazione pacchetti esterni
+# Installing external packages
 for pkg in "${!EXTERNAL_PACKAGES[@]}"; do
     url="${EXTERNAL_PACKAGES[$pkg]}"
     echo "Installazione di $pkg da $url..."
     curl -fsSL "$url" | bash
 done
 
-echo "Installazione completata."
+echo "Installation completed, enjoy!"
