@@ -21,10 +21,11 @@ PACMAN_PACKAGES=(
   "rsync"
   "tlp"
   "ufw"
-  "yazi")
+  "yazi"
+)
 
 YAY_PACKAGES=("")
 
-declare -A EXTERNAL_PACKAGES = (
+declare -A EXTERNAL_PACKAGES=(
   ["oh-my-posh"]="https://ohmyposh.dev/install.sh"
 )

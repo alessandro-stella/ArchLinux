@@ -26,7 +26,7 @@ fi
 
 # Pacman packages
 echo "Pacman packages:"
-for pkg in "${PACKAGES[@]}"; do
+for pkg in "${PACMAN_PACKAGES[@]}"; do
     echo " - $pkg"
 done
 
@@ -50,7 +50,7 @@ if [[ "$confirm" != "y" ]]; then
 fi
 
 # Installing pacman packages
-for pkg in "${PACKAGES[@]}"; do
+for pkg in "${PACMAN_PACKAGES[@]}"; do
     echo "Installazione di $pkg..."
     sudo pacman -S --noconfirm "$pkg"
 done
