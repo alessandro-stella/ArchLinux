@@ -168,7 +168,7 @@ sed -i "\|$LINE|d" "$TARGET_FILE"
 touch "$DYNAMIC_BORDER"
 
 # Add exec permissions to all scripts
-chmod +x "$CONFIG/scripts/*"
+chmod -R +x "$CONFIG/scripts"
 
 # Download repo with utility (Images, sddm theme, .bashrc)
 git clone "$GITHUB_LINK/$RESOURCES_FOLDER"
