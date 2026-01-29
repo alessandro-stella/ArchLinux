@@ -362,6 +362,8 @@ fi
 # Run script to create thumbnails
 source "$CONFIG/scripts/$THUMBNAIL_GENERATOR"
 
+echo "CONTUING..."
+
 # Generate and apply theme
 echo
 echo "Applying theme: $(basename "$SELECTED_WALLPAPER")"
