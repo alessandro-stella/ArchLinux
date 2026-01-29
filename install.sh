@@ -64,7 +64,6 @@ THEME_CHOOSER_SCRIPTS=(
 
 # General packages and apps
 PACMAN_PACKAGES=(
-  "git"
   "base-devel"
   "btop"
   "thunar"
@@ -74,7 +73,6 @@ PACMAN_PACKAGES=(
   "unzip"
   "realpath"
   "dirname"
-  "git-lfs"
   "github-cli"
   "hyprshot"
   "loupe"
@@ -137,6 +135,12 @@ NEOVIM_PACKAGES=(
 
 cd "$HOME" || exit 1
 echo "Current working directory: $PWD"
+
+# Check git
+if ! command -v git >/dev/null 2>&1; then
+    echo "git not found, proceeding with installation..."
+    sudo pacman -S --noconfirm git
+fi
 
 # Check yay
 if ! command -v yay >/dev/null 2>&1; then

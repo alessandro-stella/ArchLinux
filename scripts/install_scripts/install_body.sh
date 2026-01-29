@@ -26,6 +26,12 @@ source ./config.sh
 cd "$HOME" || exit 1
 echo "Current working directory: $PWD"
 
+# Check git
+if ! command -v git >/dev/null 2>&1; then
+    echo "git not found, proceeding with installation..."
+    sudo pacman -S --noconfirm git
+fi
+
 # Check yay
 if ! command -v yay >/dev/null 2>&1; then
     echo "yay not found, proceeding with installation..."

@@ -39,7 +39,6 @@ THEME_CHOOSER_SCRIPTS=(
 
 # General packages and apps
 PACMAN_PACKAGES=(
-  "git"
   "base-devel"
   "btop"
   "thunar"
@@ -49,7 +48,6 @@ PACMAN_PACKAGES=(
   "unzip"
   "realpath"
   "dirname"
-  "git-lfs"
   "github-cli"
   "hyprshot"
   "loupe"
