@@ -145,8 +145,8 @@ done
 
 
 # Download dotfiles
-if [ -d "$DOTFILES_FOLDER" ]; then
-    echo "Folder $DOTFILES_FOLDER already exists, updating..."
+if [ -d "$RESOURCES_FOLDER" ]; then
+    echo "Folder $RESOURCES_FOLDER already exists, updating..."
     cd "$RESOURCES_FOLDER" && git pull && cd ..
 else
     git clone "$DOTFILES_REPO" "$DOTFILES_FOLDER"
@@ -253,7 +253,10 @@ source "$CONFIG/scripts/$THUMBNAIL_GENERATOR"
 # Generate and apply theme
 echo
 echo "Applying theme: $(basename "$SELECTED_WALLPAPER")"
-sudo -u "$USER_NAME" -H bash "$CONFIG/scripts/$THEME_CHOOSER_MAIN_SCRIPT" "$SELECTED_WALLPAPER"
+
+if ! sudo -u "$USER_NAME" -H "$CONFIG/scripts/$THEME_CHOOSER_MAIN_SCRIPT" "$SELECTED_WALLPAPER"; then
+    echo "Warning: Theme chooser encountered an issue, but continuing installation..."
+fi
 
 # Moving and sourcing .bashrc
 mv -n "$RESOURCES_FOLDER/.bashrc" "$HOME/"
