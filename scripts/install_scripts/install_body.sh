@@ -104,22 +104,45 @@ if [[ "$confirm" != "y" ]]; then
 fi
 
 # Install pacman packages
-if [ "${#PACMAN_PACKAGES[@]}" -gt 0 ]; then
-    echo "Installing all pacman packages..."
-    sudo pacman -S --noconfirm "${PACMAN_PACKAGES[@]}"
+PACMAN_TO_INSTALL=()
+
+for pkg in "${PACMAN_PACKAGES[@]}"; do
+    if ! pacman -Qi "$pkg" >/dev/null 2>&1; then
+        PACMAN_TO_INSTALL+=("$pkg")
+    fi
+done
+
+if [ "${#PACMAN_TO_INSTALL[@]}" -gt 0 ]; then
+    sudo pacman -S --noconfirm "${PACMAN_TO_INSTALL[@]}"
 fi
 
 # Install yay packages
-if [ "${#YAY_PACKAGES[@]}" -gt 0 ]; then
-    echo "Installing all yay packages..."
-    sudo -u "$USER_NAME" -H yay -S --noconfirm "${YAY_PACKAGES[@]}"
-fi
-# Install external packages
-for pkg in "${!EXTERNAL_PACKAGES[@]}"; do
-    url="${EXTERNAL_PACKAGES[$pkg]}"
-    echo "Installing $pkg from $url..."
-    curl -fsSL "$url" | bash
+YAY_TO_INSTALL=()
+
+for pkg in "${YAY_PACKAGES[@]}"; do
+    if ! pacman -Qi "$pkg" >/dev/null 2>&1; then
+        YAY_TO_INSTALL+=("$pkg")
+    fi
 done
+
+if [ "${#YAY_TO_INSTALL[@]}" -gt 0 ]; then
+    sudo -u "$USER_NAME" -H yay -S --noconfirm "${YAY_TO_INSTALL[@]}"
+fi
+
+# Install external packages
+is_installed() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+for pkg in "${!EXTERNAL_PACKAGES[@]}"; do
+    if is_installed "$pkg"; then
+        echo "$pkg already installed, skipping"
+        continue
+    fi
+
+    curl -fsSL "${EXTERNAL_PACKAGES[$pkg]}" | bash
+done
+
 
 # Download dotfiles
 git clone "$DOTFILES_REPO" "$DOTFILES_FOLDER"

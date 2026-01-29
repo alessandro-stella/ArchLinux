@@ -18,7 +18,7 @@ SUDOERS_FILE="/etc/sudoers.d/sddm-wallpaper"
 WALLPAPER_SOURCE="wallpaper/blurred_wallpaper.png"
 SDDM_DEST="$SDDM_THEME_FOLDER/$SDDM_THEME/wallpaper.png"
 THEME_CHOOSER_MAIN_SCRIPT="theme_chooser.sh"
-THUMBNAIL_CREATOR="generate_thumbnails.sh"
+THUMBNAIL_GENERATOR="generate_thumbnails.sh"
 
 THEME_CHOOSER_DEPENDENCIES_PACMAN=(
    "imagemagick"
@@ -30,7 +30,7 @@ THEME_CHOOSER_DEPENDENCIES_YAY=(
 
 THEME_CHOOSER_SCRIPTS=(
   THEME_CHOOSER_MAIN_SCRIPT,
-  THUMBNAIL_CREATOR,
+  THUMBNAIL_GENERATOR,
   "oh_my_posh_changer.sh"
   "palette_changer.sh"
   "wallpaper_changer.sh"
