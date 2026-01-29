@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
-trap 'echo "❌ Error at line $LINENO. Aborting."; exit 1' ERR
+trap 'echo "Error at line $LINENO. Aborting."; exit 1' ERR
 
 # Check if user used sudo to run the script
 if [ "$EUID" -ne 0 ]; then
@@ -141,20 +141,49 @@ done
 
 rm -rf "$DOTFILES_FOLDER"
 
+# Create basic monitor configuration for hyprland
+touch "$MONITOR_SETUP"
+echo "# Basic monitor configuration" > "$MONITOR_SETUP"
+echo "monitor = , preferred, auto, 1" >> "$MONITOR_SETUP"
+
+# Remove line from hyprland.conf
+TARGET_FILE="$CONFIG/hypr/hyprland.conf"
+LINE='exec-once = ~/.config/scripts/update_configs.sh # Pull remote changes to .config and nvim'
+sed -i "\|$LINE|d" "$TARGET_FILE"
+
+# Create dynamic border file (will be setup after by theme chooser)
+touch "$DYNAMIC_BORDER"
+
 # Add exec permissions to all scripts
 chmod +x "$CONFIG/scripts/*"
 
-# Download repo with utility (Images, sddm theme, GTK_themes e .bashrc)
-# Move sddm config
-# Set Adwaita-Dark
-# Create basic monitor configuration for hyprland
+# Download repo with utility (Images, sddm theme, .bashrc)
+git clone "$GITHUB_LINK/$RESOURCE_FOLDER"
 
-# Import images
+# Move wallpapers
+mkdir -p "$HOME/Pictures"
+mkdir -p "$HOME/Pictures/Screenshots"
+mv -n "$RESOURCE_FOLDER/wallpapers" "$HOME/Pictures/"
+
 # Run script to create thumbnails
+source "$CONFIG/scripts/$THUMBNAIL_GENERATOR"
+
+# Move SDDM theme
+mv -n "$RESOURCE_FOLDER/$SDDM_THEME" "$SDDM_THEME_FOLDER/"
 
 # Adding sudoers rule for theme changer
 echo "$USER_NAME ALL=(root) NOPASSWD: /usr/bin/cp $WALLPAPER_SOURCE $SDDM_DEST" > "$SUDOERS_FILE"
 chmod 440 "$SUDOERS_FILE"
+
+# Run script to shoose theme
+source "$CONFIG/scripts/$THEME_CHOOSER_MAIN_SCRIPT"
+
+# Moving and sourcing .bashrc
+mv -n "$RESOURCE_FOLDER/.bashrc" "$HOME/"
+source "$HOME/.bashrc"
+
+# Set Adwaita-Dark
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
 # Ask for neovim
 read -rp "Do you want to configure OrionVim? [y/N] " confirm
@@ -176,37 +205,8 @@ read -rp "Do you want to keep the theme changer? [Y/n] " confirm
 confirm_theme="${confirm_theme,,}"  # lowercase
 
 if [[ "$confirm_theme" == "n" ]]; then
-    # Remove useless folders: wallust (.config), Pictures/wallpapers
-    # Edit hyprland config:
-    # 1) Remove shortcut from hypr.conf
-    # 3) Add hard-coded border to hypr.conf
-    # 4) Explain how to configure missing settings
-
-    
-    
-    for pkg in "${THEME_CHOOSER_DEPENDENCIES_PACMAN[@]}"; do
-        sudo -R --noconfirm "$pkg"
-    done
-
-    # Removing useless scripts
-    for script in "${THEME_CHOOSER_DEPENDENCIES_YAY[@]}"; do
-        yay -R --noconfirm "$pkg"
-    done
-
-    # Removing useless scripts
-    for script in "${THEME_CHOOSER_SCRIPTS[@]}"; do
-        if [ -f "$script" ]; then
-          rm -f "$script"
-        fi
-    done
-
-    # Removing sudoers rule
-    if [ -f "$SUDOERS_FILE" ]; then
-        rm -f "$SUDOERS_FILE"
-    else
+    source "cleanup.sh"   
 fi
-
-# Source .bashrc
 
 echo
 echo "Installation completed!"

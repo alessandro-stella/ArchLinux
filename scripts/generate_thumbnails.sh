@@ -3,50 +3,93 @@
 # === PARAMETERS ===
 WALLPAPER_DIR="$HOME/Pictures/wallpapers"
 THUMB_DIR="$WALLPAPER_DIR/thumbnails"
-THUMB_SIZE="320x180" # Dimensione ideale per le icone di Rofi
-QUALITY=80            # Qualità JPEG/PNG per ridurre il peso dei file
+THUMB_SIZE="320x180"
+QUALITY=80
 
-# === CHECK DIRECTORY ===
+# === DIRECTORY CHECK ===
 if [ ! -d "$WALLPAPER_DIR" ]; then
-    echo "Errore: La cartella $WALLPAPER_DIR non esiste."
+    echo "Error: Directory $WALLPAPER_DIR does not exist."
     exit 1
 fi
 
-if [ ! -d "$THUMB_DIR" ]; then
-    echo "Cartella thumbnails non trovata. Creazione in corso..."
-    mkdir -p "$THUMB_DIR"
-fi
+mkdir -p "$THUMB_DIR"
 
-# === SYNC CHECK ===
-# Conta i file escludendo la cartella thumbnails stessa
-COUNT_WALLPAPERS=$(find "$WALLPAPER_DIR" -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) | wc -l)
-COUNT_THUMBS=$(find "$THUMB_DIR" -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) | wc -l)
+# === COLLECT WALLPAPERS ===
+mapfile -t WALLPAPERS < <(
+    find "$WALLPAPER_DIR" -maxdepth 1 -type f \
+    \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \)
+)
 
-echo "Sfondi trovati: $COUNT_WALLPAPERS"
-echo "Miniature trovate: $COUNT_THUMBS"
+echo
+echo "Wallpapers found: ${#WALLPAPERS[@]}"
+echo "Scanning thumbnails..."
 
-if [ "$COUNT_WALLPAPERS" -eq "$COUNT_THUMBS" ]; then
-    echo "Le cartelle sono sincronizzate. Nulla da fare."
+# === BUILD WALLPAPER NAME SET ===
+declare -A WALL_NAMES
+for FILE in "${WALLPAPERS[@]}"; do
+    NAME="$(basename "$FILE")"
+    WALL_NAMES["${NAME%.*}"]=1
+done
+
+# === CLEANUP ORPHAN THUMBNAILS ===
+REMOVED=0
+
+mapfile -t THUMBS < <(
+    find "$THUMB_DIR" -maxdepth 1 -type f -iname "*.png"
+)
+
+for THUMB in "${THUMBS[@]}"; do
+    NAME="$(basename "$THUMB")"
+    BASE="${NAME%.png}"
+
+    if [ -z "${WALL_NAMES[$BASE]}" ]; then
+        rm -f "$THUMB"
+        REMOVED=$((REMOVED + 1))
+    fi
+done
+
+echo "Orphan thumbnails removed: $REMOVED"
+
+# === CHECK FOR MISSING THUMBNAILS ===
+MISSING=()
+
+for FILE in "${WALLPAPERS[@]}"; do
+    NAME="$(basename "$FILE")"
+    BASE="${NAME%.*}"
+    THUMB_FILE="$THUMB_DIR/$BASE.png"
+
+    if [ ! -f "$THUMB_FILE" ]; then
+        MISSING+=("$FILE")
+    fi
+done
+
+TOTAL_MISSING=${#MISSING[@]}
+
+if [ "$TOTAL_MISSING" -eq 0 ]; then
+    echo "All thumbnails are present."
     exit 0
 fi
 
-echo "Sincronizzazione necessaria. Generazione miniature in corso..."
+echo
+echo "Missing thumbnails: $TOTAL_MISSING"
+echo "Generating thumbnails..."
 
-# === GENERATION ===
-# Usiamo 'mogrify' che è più veloce di 'convert' per operazioni di massa
-# -path: salva i risultati nella cartella thumbnails
-# -thumbnail: ottimizzato per creare anteprime (rimuove profili colore pesanti)
-cp "$WALLPAPER_DIR"/*.{jpg,jpeg,png} "$THUMB_DIR/" 2>/dev/null || true
+# === GENERATION PHASE ===
+CURRENT=0
 
-mogrify -path "$THUMB_DIR" \
-        -thumbnail "$THUMB_SIZE^" \
-        -gravity center \
-        -extent "$THUMB_SIZE" \
-        -quality "$QUALITY" \
-        -format png \
-        "$THUMB_DIR"/*.png
+for FILE in "${MISSING[@]}"; do
+    mogrify -path "$THUMB_DIR" \
+            -thumbnail "$THUMB_SIZE^" \
+            -gravity center \
+            -extent "$THUMB_SIZE" \
+            -quality "$QUALITY" \
+            -format png \
+            "$FILE"
 
-# Rimuoviamo eventuali file con estensione doppia (es. .png.jpg) se creati dal format
-find "$THUMB_DIR" -type f -name "*.*.*" -delete
+    CURRENT=$((CURRENT + 1))
+    PERCENT=$((CURRENT * 100 / TOTAL_MISSING))
+    printf "\rProgress: %3d%% (%d/%d)" "$PERCENT" "$CURRENT" "$TOTAL_MISSING"
+done
 
-echo "Done! Miniature ottimizzate create in $THUMB_DIR"
+echo
+echo "Done! Thumbnails created: $TOTAL_MISSING"

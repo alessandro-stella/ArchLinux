@@ -4,14 +4,20 @@
 GITHUB_LINK="https://github.com/alessandro-stella"
 DOTFILES_FOLDER="dotfiles"
 DOTFILES_REPO="$GITHUB_LINK/$DOTFILES_FOLDER"
+MONITOR_SETUP="monitor-setup.conf"
+BORDER_SETUP="dynamic-border.conf"
 
 # Additional resources (wallpaper, .bashrc etc)
-GITHUB_LINK_ADDITIONAL=
+RESOURCES_FOLDER="dotfiles-resources"
+SDDM_THEME="sdt"
+SDDM_THEME_FOLDER="/usr/share/sddm/themes"
 
 # Theme chooser configuration
 SUDOERS_FILE="/etc/sudoers.d/sddm-wallpaper"
 WALLPAPER_SOURCE="wallpaper/blurred_wallpaper.png"
-SDDM_DEST="/usr/share/sddm/themes/sdt/wallpaper.png"
+SDDM_DEST="$SDDM_THEME_FOLDER/$SDDM_THEME/wallpaper.png"
+THEME_CHOOSER_MAIN_SCRIPT="theme_chooser.sh"
+THUMBNAIL_CREATOR="generate_thumbnails.sh"
 
 THEME_CHOOSER_DEPENDENCIES_PACMAN=(
    "imagemagick"
@@ -22,11 +28,11 @@ THEME_CHOOSER_DEPENDENCIES_YAY=(
 )
 
 THEME_CHOOSER_SCRIPTS=(
+  THEME_CHOOSER_MAIN_SCRIPT,
+  THUMBNAIL_CREATOR,
   "oh_my_posh_changer.sh"
   "palette_changer.sh"
   "wallpaper_changer.sh"
-  "generate_thumbnails.sh"
-  "theme_chooser.sh"
   "waybar_changer.sh"
 )
 
