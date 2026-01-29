@@ -44,13 +44,9 @@ generate_menu() {
     mapfile -t PICS < "$cache_list"
 
     for pic_path in "${PICS[@]}"; do
-        # Otteniamo il nome file (es. image.png)
         pic_name=$(basename "$pic_path")
-        # Nome senza estensione per il display
         display_name="${pic_name%.*}"
 
-        # Dato che hai già tutto in thumbnails, passiamo direttamente il percorso
-        # Rofi è molto veloce se l'immagine è già piccola (es. 200-300px)
         printf "%s\x00icon\x1f%s\n" "$display_name" "$pic_path"
     done
 }
@@ -68,7 +64,6 @@ main() {
         exit 0
     fi
 
-    # Find the file corresponding to the chosen name
     mapfile -t PICS < "$cache_list"
     selected_file=""
     for pic_path in "${PICS[@]}"; do

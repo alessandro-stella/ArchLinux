@@ -184,9 +184,9 @@ rm -rf "$DOTFILES_FOLDER"
 rm -rf "$CONFIG/$INSTALL_SCRIPTS"
 
 # Create basic monitor configuration for hyprland
-touch "$MONITOR_SETUP"
-echo "# Basic monitor configuration" > "$MONITOR_SETUP"
-echo "monitor = , preferred, auto, 1" >> "$MONITOR_SETUP"
+touch "$CONFIG/hypr/$MONITOR_SETUP"
+echo "# Basic monitor configuration" > "$CONFIG/hypr/$MONITOR_SETUP"
+echo "monitor = , preferred, auto, 1" >> "$CONFIG/hypr/$MONITOR_SETUP"
 
 # Remove line from hyprland.conf
 TARGET_FILE="$CONFIG/hypr/hyprland.conf"
@@ -194,7 +194,7 @@ LINE='exec-once = ~/.config/scripts/update_configs.sh # Pull remote changes to .
 sed -i "\|$LINE|d" "$TARGET_FILE"
 
 # Create dynamic border file (will be setup after by theme chooser)
-touch "$DYNAMIC_BORDER"
+touch "$CONFIG/hypr/$DYNAMIC_BORDER"
 
 # Add exec permissions to all scripts
 chmod -R +x "$CONFIG/scripts"
@@ -212,18 +212,49 @@ mkdir -p "$HOME/Pictures"
 mkdir -p "$HOME/Pictures/Screenshots"
 mv -n "$RESOURCES_FOLDER/wallpapers" "$HOME/Pictures/"
 
-# Run script to create thumbnails
-source "$CONFIG/scripts/$THUMBNAIL_GENERATOR"
-
 # Move SDDM theme
 mv -n "$RESOURCES_FOLDER/$SDDM_THEME" "$SDDM_THEME_FOLDER/"
 
 # Adding sudoers rule for theme changer
-echo "$USER_NAME ALL=(root) NOPASSWD: /usr/bin/cp $WALLPAPER_SOURCE $SDDM_DEST" > "$SUDOERS_FILE"
+echo "$USER_NAME ALL=(root) NOPASSWD: /usr/bin/cp $CONFIG/$WALLPAPER_SOURCE $SDDM_DEST" > "$SUDOERS_FILE"
 chmod 440 "$SUDOERS_FILE"
 
-# Run script to shoose theme
-source "$CONFIG/scripts/$THEME_CHOOSER_MAIN_SCRIPT"
+# Run script to choose a default theme
+
+echo
+echo "Configuring theme"
+echo "Do you want to use a custom image? [y/N]"
+read -r use_custom < /dev/tty
+SELECTED_WALLPAPER="$HOME/Pictures/wallpapers/$DEFAULT_WALLPAPER"
+
+if [[ "${use_custom,,}" == "y" ]]; then
+    while true; do
+        echo -n "Insert image path (like $HOME/Downloads/img.png): "
+        read -r user_path < /dev/tty
+
+        user_path="${user_path/#\~/$HOME}"
+
+        if [[ -f "$user_path" ]]; then
+            filename=$(basename "$user_path")
+            dest_path="$HOME/Pictures/wallpapers/$filename"
+            
+            echo "Copying image..."
+            cp "$user_path" "$dest_path"
+            
+            SELECTED_WALLPAPER="$dest_path"
+            break
+        else
+            echo "Error: file not found. Try again"
+        fi
+    done
+fi
+
+# Run script to create thumbnails
+source "$CONFIG/scripts/$THUMBNAIL_GENERATOR"
+
+# Generate and apply theme
+echo "Applying theme: $(basename "$SELECTED_WALLPAPER")"
+source "$CONFIG/scripts/$THEME_CHOOSER_MAIN_SCRIPT" "$SELECTED_WALLPAPER"
 
 # Moving and sourcing .bashrc
 mv -n "$RESOURCES_FOLDER/.bashrc" "$HOME/"
@@ -276,6 +307,10 @@ systemctl start ufw.service
 ufw default deny incoming
 ufw default allow outgoing
 ufw --force enable
+
+# Give user all permissions over copied files
+chown -R "$USER_NAME":"$USER_NAME" "$CONFIG"
+chown -R "$USER_NAME":"$USER_NAME" "$HOME/Pictures"
 
 # Delete installation script
 sudo rm "$CONFIG/install.sh"

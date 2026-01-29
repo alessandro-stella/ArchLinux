@@ -14,10 +14,11 @@ SDDM_THEME="sdt"
 SDDM_THEME_FOLDER="/usr/share/sddm/themes"
 
 # Theme chooser configuration
+DEFAULT_WALLPAPER="City-Rain.png"
 SUDOERS_FILE="/etc/sudoers.d/sddm-wallpaper"
 WALLPAPER_SOURCE="wallpaper/blurred_wallpaper.png"
 SDDM_DEST="$SDDM_THEME_FOLDER/$SDDM_THEME/wallpaper.png"
-THEME_CHOOSER_MAIN_SCRIPT="theme_chooser.sh"
+THEME_CHOOSER_MAIN_SCRIPT="wallpaper_changer.sh"
 THUMBNAIL_GENERATOR="generate_thumbnails.sh"
 
 THEME_CHOOSER_DEPENDENCIES_PACMAN=(
@@ -33,7 +34,7 @@ THEME_CHOOSER_SCRIPTS=(
   "$THUMBNAIL_GENERATOR"
   "oh_my_posh_changer.sh"
   "palette_changer.sh"
-  "wallpaper_changer.sh"
+  "theme_chooser.sh"
   "waybar_changer.sh"
 )
 
