@@ -217,7 +217,7 @@ done
 # Install yay packages
 for pkg in "${YAY_PACKAGES[@]}"; do
     echo "Installing $pkg..."
-    sudo -u "$USER_NAME" yay -S --noconfirm "$pkg"
+    sudo -u "$USER_NAME" -H yay -S --noconfirm "$pkg"
 done
 
 # Install external packages
@@ -393,7 +393,7 @@ done
 
 # Remove yay dependencies
 for pkg in "${THEME_CHOOSER_DEPENDENCIES_YAY[@]}"; do
-    yay -R --noconfirm "$pkg"
+    sudo -u "$USER_NAME" -H yay -R --noconfirm "$pkg"
 done
 
 
