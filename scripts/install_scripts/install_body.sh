@@ -108,7 +108,7 @@ done
 # Install yay packages
 for pkg in "${YAY_PACKAGES[@]}"; do
     echo "Installing $pkg..."
-    sudo -u "$USER_NAME" yay -S --noconfirm "$pkg"
+    sudo -u "$USER_NAME" -H yay -S --noconfirm "$pkg"
 done
 
 # Install external packages

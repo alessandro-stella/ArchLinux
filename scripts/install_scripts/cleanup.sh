@@ -60,7 +60,7 @@ done
 
 # Remove yay dependencies
 for pkg in "${THEME_CHOOSER_DEPENDENCIES_YAY[@]}"; do
-    yay -R --noconfirm "$pkg"
+    sudo -u "$USER_NAME" -H yay -R --noconfirm "$pkg"
 done
 
 
