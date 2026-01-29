@@ -47,7 +47,6 @@ PACMAN_PACKAGES=(
   "swaync"
   "libnotify"
   "unzip"
-  "realpath"
   "dirname"
   "github-cli"
   "hyprshot"
