@@ -20,6 +20,10 @@ USER_NAME="$SUDO_USER"
 HOME="/home/$USER_NAME"
 CONFIG="$HOME/.config"
 
+# Loop to keep sudo active
+sudo -v
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
 echo
 echo "Starting install script..."
 
@@ -95,6 +99,7 @@ PACMAN_PACKAGES=(
   "gtk3"
   "gtk4"
   "gnome-themes-extra"
+  "fastfetch"
 )
 
 YAY_PACKAGES=(
@@ -209,17 +214,16 @@ if [[ "$confirm" != "y" ]]; then
 fi
 
 # Install pacman packages
-for pkg in "${PACMAN_PACKAGES[@]}"; do
-    echo "Installing $pkg..."
-    sudo pacman -S --noconfirm "$pkg"
-done
+if [ "${#PACMAN_PACKAGES[@]}" -gt 0 ]; then
+    echo "Installing all pacman packages..."
+    sudo pacman -S --noconfirm "${PACMAN_PACKAGES[@]}"
+fi
 
 # Install yay packages
-for pkg in "${YAY_PACKAGES[@]}"; do
-    echo "Installing $pkg..."
-    sudo -u "$USER_NAME" -H yay -S --noconfirm "$pkg"
-done
-
+if [ "${#YAY_PACKAGES[@]}" -gt 0 ]; then
+    echo "Installing all yay packages..."
+    sudo -u "$USER_NAME" -H yay -S --noconfirm "${YAY_PACKAGES[@]}"
+fi
 # Install external packages
 for pkg in "${!EXTERNAL_PACKAGES[@]}"; do
     url="${EXTERNAL_PACKAGES[$pkg]}"
@@ -274,7 +278,7 @@ sed -i "\|$LINE|d" "$TARGET_FILE"
 touch "$DYNAMIC_BORDER"
 
 # Add exec permissions to all scripts
-chmod +x "$CONFIG/scripts/*"
+chmod -R +x "$CONFIG/scripts"
 
 # Download repo with utility (Images, sddm theme, .bashrc)
 git clone "$GITHUB_LINK/$RESOURCES_FOLDER"
@@ -429,6 +433,9 @@ ufw --force enable
 
 # Delete installation script
 sudo rm "$CONFIG/install.sh"
+
+# Clean sudo refresh added at the start
+kill $(jobs -p) 2>/dev/null || true
 
 echo
 echo "Installation completed!"
