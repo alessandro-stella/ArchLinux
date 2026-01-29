@@ -70,6 +70,7 @@ PACMAN_PACKAGES=(
   "gtk3"
   "gtk4"
   "gnome-themes-extra"
+  "fastfetch"
 )
 
 YAY_PACKAGES=(
