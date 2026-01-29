@@ -2,7 +2,7 @@
 
 ## Install script
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alessandro-stella/dotfiles/master/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alessandro-stella/dotfiles/master/install.sh | sudo bash
 ```
 
 

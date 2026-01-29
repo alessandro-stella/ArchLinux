@@ -75,4 +75,4 @@ done
 # Removing sudoers rule
 if [ -f "$SUDOERS_FILE" ]; then
     rm -f "$SUDOERS_FILE"
-else
+fi
