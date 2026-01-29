@@ -40,6 +40,7 @@ THEME_CHOOSER_SCRIPTS=(
 
 # General packages and apps
 PACMAN_PACKAGES=(
+  "pacman-contrib"
   "git-lfs"
   "base-devel"
   "btop"

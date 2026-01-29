@@ -6,7 +6,7 @@ DEST_PATH="/usr/share/sddm/themes/sdt/wallpaper.png"
 TMP_PATH="/tmp/sddm_wallpaper_tmp.png"
 BLUR_LEVEL="0x12"
 CONFIG_WALLPAPER_DIR="$HOME/.config/wallpaper"
-# Cambiato nome per chiarezza, ora è il riferimento per swww
+# Updated name for clarity, acts as the reference for swww
 CURRENT_WALLPAPER="$CONFIG_WALLPAPER_DIR/current_wallpaper.png"
 BLURRED_SAVE_PATH="$CONFIG_WALLPAPER_DIR/blurred_wallpaper.png"
 
@@ -23,7 +23,7 @@ if [ ! -d "$CONFIG_WALLPAPER_DIR" ]; then
 fi
 
 # === SELECT IMAGE ===
-# Se riceve un argomento usa quello, altrimenti sceglie a caso
+# If an argument is provided, use it; otherwise, pick a random image
 SELECTED_IMAGE=$([[ -n "${1:-}" ]] && echo "$1" || find "$WALLPAPER_DIR" -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.jpeg" \) | shuf -n 1)
 
 if [ -z "$SELECTED_IMAGE" ] || [ ! -f "$SELECTED_IMAGE" ]; then
@@ -33,23 +33,24 @@ fi
 
 echo "Selected wallpaper: $SELECTED_IMAGE"
 
-# Aggiorna il link simbolico o copia il file per avere un riferimento fisso
+# Update symbolic link or copy file to maintain a fixed reference
 cp "$SELECTED_IMAGE" "$CURRENT_WALLPAPER"
 
 # === APPLY WITH SWWW ===
-# Verifica se il demone è attivo, altrimenti lo avvia
+# Check if the daemon is active, start it if not
 if ! swww query &>/dev/null; then
-    swww-daemon --format xrgb &
+    echo "Starting swww-daemon..."
+    swww-daemon &
     sleep 0.5
 fi
 
-# Genera coordinate casuali per l'effetto "grow"
+# Generate random coordinates for the "grow" transition effect
 RAND_X=$(echo "scale=2; $((RANDOM % 101)) / 100" | bc)
 RAND_Y=$(echo "scale=2; $((RANDOM % 101)) / 100" | bc)
 
 echo "Transition starting at X:$RAND_X Y:$RAND_Y"
 
-# Applica lo sfondo con transizione ottimizzata
+# Apply wallpaper with optimized transition
 swww img "$CURRENT_WALLPAPER" \
     --transition-type grow \
     --transition-pos "$RAND_X,$RAND_Y" \
@@ -60,24 +61,27 @@ swww img "$CURRENT_WALLPAPER" \
 # === UPDATE COLORS (Wal/Pywal/Palette) ===
 PALETTE_SCRIPT="$(dirname "$0")/palette_changer.sh"
 if [ -f "$PALETTE_SCRIPT" ]; then
+    echo "Updating system color palette..."
     "$PALETTE_SCRIPT"
 fi
 
 # === SDDM BLURRED WALLPAPER ===
-# Creiamo la versione sfocata in background per non bloccare lo script
+# Generate the blurred version in the background to avoid blocking the script
 echo "Generating blurred wallpaper for SDDM..."
 (
     magick "$SELECTED_IMAGE" -resize 1920x1080^ -gravity center -extent 1920x1080 -blur "$BLUR_LEVEL" "$TMP_PATH"
     cp "$TMP_PATH" "$BLURRED_SAVE_PATH"
     
-    # Tentativo di copia in SDDM senza bloccare se sudo fallisce o richiede password
+    # Attempt to copy to SDDM without blocking if sudo fails or requires password
     if sudo -n cp "$BLURRED_SAVE_PATH" "$DEST_PATH" 2>/dev/null; then
-        echo "SDDM wallpaper updated."
+        echo "SDDM wallpaper successfully updated."
     else
-        echo "SDDM update skipped (requires sudo or password-less sudo)."
+        echo "SDDM update skipped (requires sudo or password-less sudo rule)."
     fi
     rm -f "$TMP_PATH"
 ) &
 
 # === NOTIFY ===
 notify-send -i "$SELECTED_IMAGE" -u low "Wallpaper Changed" "Transition: Grow from $RAND_X, $RAND_Y"
+
+echo "Wallpaper update process completed!"

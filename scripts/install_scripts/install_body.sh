@@ -223,7 +223,7 @@ chmod 440 "$SUDOERS_FILE"
 
 echo
 echo "Configuring theme"
-echo "Do you want to use a custom image? [y/N]"
+echo "Do you want to use a custom image? [y/N] "
 read -r use_custom < /dev/tty
 SELECTED_WALLPAPER="$HOME/Pictures/wallpapers/$DEFAULT_WALLPAPER"
 
