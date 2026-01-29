@@ -159,7 +159,7 @@ if ! command -v yay >/dev/null 2>&1; then
 
     # Build and installation
     cd yay
-    makepkg -si --noconfirm
+    sudo -u "$USER_NAME" makepkg -si --noconfirm
     cd "$HOME"
 fi
 
