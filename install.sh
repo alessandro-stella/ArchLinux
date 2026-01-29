@@ -147,12 +147,12 @@ fi
 if ! command -v yay >/dev/null 2>&1; then
     echo "yay not found, proceeding with installation..."
 
-    # Cloning yay as the normal user
+    # Cloning or updating yay
     if [ ! -d "yay" ]; then
-        # Use sudo -u to run git clone as the original user
         sudo -u "$USER_NAME" git clone https://aur.archlinux.org/yay.git
     else
-        echo "yay already cloned, updating..."
+        echo "yay already cloned, handling ownership and updating..."
+        sudo -u "$USER_NAME" git config --global --add safe.directory "$HOME/yay"
         cd yay
         sudo -u "$USER_NAME" git pull
         cd ..
@@ -160,8 +160,7 @@ if ! command -v yay >/dev/null 2>&1; then
 
     # Build and installation
     cd yay
-    # Use sudo -u to run makepkg as the normal user
-    # makepkg will handle the elevation for the final install phase automatically
+    chown -R "$USER_NAME":"$USER_NAME" .
     sudo -u "$USER_NAME" makepkg -si --noconfirm
     cd "$HOME"
 fi
