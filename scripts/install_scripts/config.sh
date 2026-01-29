@@ -47,7 +47,6 @@ PACMAN_PACKAGES=(
   "swaync"
   "libnotify"
   "unzip"
-  "dirname"
   "github-cli"
   "hyprshot"
   "loupe"

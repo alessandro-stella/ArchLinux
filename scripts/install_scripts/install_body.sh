@@ -225,6 +225,22 @@ if [[ "$confirm_theme" == "n" ]]; then
     source "cleanup.sh"
 fi
 
+# Enable and start TLP
+echo "Enabling and starting TLP..."
+systemctl enable tlp.service
+systemctl start tlp.service
+
+# Enable and start UFW
+echo "Enabling and starting UFW..."
+systemctl enable ufw.service
+systemctl start ufw.service
+
+# Set default firewall rules (deny incoming, allow outgoing)
+ufw default deny incoming
+ufw default allow outgoing
+ufw --force enable
+
+# Delete installation script
 sudo rm "$CONFIG/install.sh"
 
 echo
