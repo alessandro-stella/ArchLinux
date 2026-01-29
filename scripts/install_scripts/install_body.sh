@@ -279,6 +279,8 @@ ufw --force enable
 
 # Delete installation script
 sudo rm "$CONFIG/install.sh"
+sudo rm "$CONFIG/README.md"
+sudo rm "$CONFIG/QtProject.conf"
 
 # Clean sudo refresh added at the start
 kill $(jobs -p) 2>/dev/null || true
