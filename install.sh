@@ -359,10 +359,12 @@ if [[ "${use_custom,,}" == "y" ]]; then
     done
 fi
 
-# Run script to create thumbnails
-source "$CONFIG/scripts/$THUMBNAIL_GENERATOR"
+# Give user all permissions over copied files
+chown -R "$USER_NAME":"$USER_NAME" "$CONFIG"
+chown -R "$USER_NAME":"$USER_NAME" "$HOME/Pictures"
 
-echo "CONTUING..."
+# Run script to create thumbnails
+bash "$config/scripts/$thumbnail_generator"
 
 # Generate and apply theme
 echo
@@ -374,7 +376,6 @@ fi
 
 # Moving and sourcing .bashrc
 mv -n "$RESOURCES_FOLDER/.bashrc" "$HOME/"
-source "$HOME/.bashrc"
 
 # Set Adwaita-Dark
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
@@ -387,14 +388,15 @@ confirm="${confirm,,}"
 if [[ "$confirm" == "y" ]]; then
   sudo rm -rf "$CONFIG/nvim"
 
-  for pkg in "${NEOVIM_PACKAGES[@]}"; do
-      echo "Installing $pkg..."
-      sudo pacman -S --noconfirm "$pkg"
-  done
+  if [ "${#NEOVIM_PACKAGES[@]}" -gt 0 ]; then
+    echo "Installing Neovim dependencies: ${NEOVIM_PACKAGES[*]}"
+    sudo pacman -S --noconfirm "${NEOVIM_PACKAGES[@]}"
+  fi
 
   if [ ! -d "$CONFIG/nvim" ]; then
       echo "Cloning OrionVim repository..."
       sudo -u "$USER_NAME" git clone "$NEOVIM_REPO" "$CONFIG/nvim"
+      sudo rm -rf "$CONFIG/nvim/.git" 
   else
       echo "Neovim configuration folder already exists. Skipping clone."
   fi
@@ -502,10 +504,6 @@ ufw default deny incoming
 ufw default allow outgoing
 ufw --force enable
 
-# Give user all permissions over copied files
-chown -R "$USER_NAME":"$USER_NAME" "$CONFIG"
-chown -R "$USER_NAME":"$USER_NAME" "$HOME/Pictures"
-
 # Delete installation script
 sudo rm "$CONFIG/install.sh"
 sudo rm "$CONFIG/README.md"
@@ -526,4 +524,5 @@ if [[ "$confirm" != "n" ]]; then
     reboot
 fi
 
+echo "We suggest to close this terminal or run 'source ~/.bashrc' to complete the installation"
 echo "Enjoy your new setup!"
