@@ -59,7 +59,7 @@ done
 
 
 # Remove yay dependencies
-for script in "${THEME_CHOOSER_DEPENDENCIES_YAY[@]}"; do
+for pkg in "${THEME_CHOOSER_DEPENDENCIES_YAY[@]}"; do
     yay -R --noconfirm "$pkg"
 done
 

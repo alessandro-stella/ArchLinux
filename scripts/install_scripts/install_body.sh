@@ -90,7 +90,8 @@ fi
 echo
 
 # Ask confirm
-read -rp "Do you want to proceed with the installation? [y/N] " confirm
+echo -n "Do you want to proceed with the installation? [y/N] "
+read -r confirm < /dev/tty
 confirm="${confirm,,}"
 
 if [[ "$confirm" != "y" ]]; then
@@ -167,18 +168,18 @@ touch "$DYNAMIC_BORDER"
 chmod +x "$CONFIG/scripts/*"
 
 # Download repo with utility (Images, sddm theme, .bashrc)
-git clone "$GITHUB_LINK/$RESOURCE_FOLDER"
+git clone "$GITHUB_LINK/$RESOURCES_FOLDER"
 
 # Move wallpapers
 mkdir -p "$HOME/Pictures"
 mkdir -p "$HOME/Pictures/Screenshots"
-mv -n "$RESOURCE_FOLDER/wallpapers" "$HOME/Pictures/"
+mv -n "$RESOURCES_FOLDER/wallpapers" "$HOME/Pictures/"
 
 # Run script to create thumbnails
 source "$CONFIG/scripts/$THUMBNAIL_GENERATOR"
 
 # Move SDDM theme
-mv -n "$RESOURCE_FOLDER/$SDDM_THEME" "$SDDM_THEME_FOLDER/"
+mv -n "$RESOURCES_FOLDER/$SDDM_THEME" "$SDDM_THEME_FOLDER/"
 
 # Adding sudoers rule for theme changer
 echo "$USER_NAME ALL=(root) NOPASSWD: /usr/bin/cp $WALLPAPER_SOURCE $SDDM_DEST" > "$SUDOERS_FILE"
@@ -188,33 +189,40 @@ chmod 440 "$SUDOERS_FILE"
 source "$CONFIG/scripts/$THEME_CHOOSER_MAIN_SCRIPT"
 
 # Moving and sourcing .bashrc
-mv -n "$RESOURCE_FOLDER/.bashrc" "$HOME/"
+mv -n "$RESOURCES_FOLDER/.bashrc" "$HOME/"
 source "$HOME/.bashrc"
 
 # Set Adwaita-Dark
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
 # Ask for neovim
-read -rp "Do you want to configure OrionVim? [y/N] " confirm
+echo -n "Do you want to configure OrionVim? [y/N] "
+read -r confirm < /dev/tty
 confirm="${confirm,,}"
 
 if [[ "$confirm" == "y" ]]; then
-  # Install neovim packages
+  sudo rm -rf "$CONFIG/nvim"
+
   for pkg in "${NEOVIM_PACKAGES[@]}"; do
       echo "Installing $pkg..."
       sudo pacman -S --noconfirm "$pkg"
   done
 
-  # Clone git repo
-  git clone "$NEOVIM_REPO" "$CONFIG/nvim"
+  if [ ! -d "$CONFIG/nvim" ]; then
+      echo "Cloning OrionVim repository..."
+      sudo -u "$USER_NAME" git clone "$NEOVIM_REPO" "$CONFIG/nvim"
+  else
+      echo "Neovim configuration folder already exists. Skipping clone."
+  fi
 fi
 
 # Ask for theme changer
-read -rp "Do you want to keep the theme changer? [Y/n] " confirm
-confirm_theme="${confirm_theme,,}"  # lowercase
+echo -n "Do you want to keep the theme changer? [Y/n] "
+read -r confirm_theme < /dev/tty
+confirm_theme="${confirm_theme,,}"
 
 if [[ "$confirm_theme" == "n" ]]; then
-    source "cleanup.sh"   
+    source "cleanup.sh"
 fi
 
 echo

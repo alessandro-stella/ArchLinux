@@ -6,7 +6,7 @@ DOTFILES_FOLDER="dotfiles"
 DOTFILES_REPO="$GITHUB_LINK/$DOTFILES_FOLDER"
 INSTALL_SCRIPTS="scripts/install_scripts"
 MONITOR_SETUP="monitor-setup.conf"
-BORDER_SETUP="dynamic-border.conf"
+DYNAMIC_BORDER="dynamic-border.conf"
 
 # Additional resources (wallpaper, .bashrc etc)
 RESOURCES_FOLDER="dotfiles-resources"
