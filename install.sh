@@ -413,13 +413,18 @@ fi
 ### --- END CLEANUP.SH --- ###
 fi
 
+sudo rm "$CONFIG/install.sh"
+
 echo
 echo "Installation completed!"
-read -rp "Do you want to reboot (suggested)? [Y/n] " confirm
+
+echo -n "Do you want to reboot (suggested)? [Y/n] "
+read -r confirm < /dev/tty
 confirm="${confirm,,}"
 
 if [[ "$confirm" != "n" ]]; then
-  # Reboot
+    echo "Rebooting system now..."
+    reboot
 fi
 
 echo "Enjoy your new setup!"
