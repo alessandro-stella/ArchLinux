@@ -257,7 +257,6 @@ done
 
 
 # Download dotfiles
-
 if [ -d "$DOTFILES_FOLDER" ]; then
     echo "Folder $DOTFILES_FOLDER already exists, updating..."
     cd "$RESOURCES_FOLDER" && git pull && cd ..
@@ -331,8 +330,7 @@ mv -n "$RESOURCES_FOLDER/$SDDM_THEME" "$SDDM_THEME_FOLDER/"
 echo "$USER_NAME ALL=(root) NOPASSWD: /usr/bin/cp $CONFIG/$WALLPAPER_SOURCE $SDDM_DEST" > "$SUDOERS_FILE"
 chmod 440 "$SUDOERS_FILE"
 
-# Run script to choose a default theme
-
+# Run script to choose a theme
 echo
 echo "Configuring theme"
 echo "Do you want to use a custom image? [y/N] "
@@ -365,8 +363,9 @@ fi
 source "$CONFIG/scripts/$THUMBNAIL_GENERATOR"
 
 # Generate and apply theme
+echo
 echo "Applying theme: $(basename "$SELECTED_WALLPAPER")"
-source "$CONFIG/scripts/$THEME_CHOOSER_MAIN_SCRIPT" "$SELECTED_WALLPAPER"
+sudo -u "$USER_NAME" -H bash "$CONFIG/scripts/$THEME_CHOOSER_MAIN_SCRIPT" "$SELECTED_WALLPAPER"
 
 # Moving and sourcing .bashrc
 mv -n "$RESOURCES_FOLDER/.bashrc" "$HOME/"
