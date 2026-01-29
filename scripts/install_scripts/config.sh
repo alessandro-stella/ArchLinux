@@ -39,6 +39,7 @@ THEME_CHOOSER_SCRIPTS=(
 
 # General packages and apps
 PACMAN_PACKAGES=(
+  "git-lfs"
   "base-devel"
   "btop"
   "thunar"
