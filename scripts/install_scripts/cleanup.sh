@@ -54,7 +54,7 @@ sed -i "\|$SEARCH_LINE|d" "$TARGET_FILE"
 
 # Remove pacman dependencies
 for pkg in "${THEME_CHOOSER_DEPENDENCIES_PACMAN[@]}"; do
-    sudo -R --noconfirm "$pkg"
+    sudo pacman -Rs --noconfirm "$pkg"
 done
 
 

@@ -29,8 +29,8 @@ THEME_CHOOSER_DEPENDENCIES_YAY=(
 )
 
 THEME_CHOOSER_SCRIPTS=(
-  THEME_CHOOSER_MAIN_SCRIPT,
-  THUMBNAIL_GENERATOR,
+  "$THEME_CHOOSER_MAIN_SCRIPT"
+  "$THUMBNAIL_GENERATOR"
   "oh_my_posh_changer.sh"
   "palette_changer.sh"
   "wallpaper_changer.sh"

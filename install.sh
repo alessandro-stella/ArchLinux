@@ -58,8 +58,8 @@ THEME_CHOOSER_DEPENDENCIES_YAY=(
 )
 
 THEME_CHOOSER_SCRIPTS=(
-  THEME_CHOOSER_MAIN_SCRIPT,
-  THUMBNAIL_GENERATOR,
+  "$THEME_CHOOSER_MAIN_SCRIPT"
+  "$THUMBNAIL_GENERATOR"
   "oh_my_posh_changer.sh"
   "palette_changer.sh"
   "wallpaper_changer.sh"
@@ -255,7 +255,13 @@ done
 
 
 # Download dotfiles
-git clone "$DOTFILES_REPO" "$DOTFILES_FOLDER"
+
+if [ -d "$DOTFILES_FOLDER" ]; then
+    echo "Folder $DOTFILES_FOLDER already exists, updating..."
+    cd "$RESOURCES_FOLDER" && git pull && cd ..
+else
+    git clone "$DOTFILES_REPO" "$DOTFILES_FOLDER"
+fi
 
 for item in "$DOTFILES_FOLDER"/*; do
     name=$(basename "$item")
@@ -304,7 +310,12 @@ touch "$DYNAMIC_BORDER"
 chmod -R +x "$CONFIG/scripts"
 
 # Download repo with utility (Images, sddm theme, .bashrc)
-git clone "$GITHUB_LINK/$RESOURCES_FOLDER"
+if [ -d "$RESOURCES_FOLDER" ]; then
+    echo "Folder $RESOURCES_FOLDER already exists, updating..."
+    cd "$RESOURCES_FOLDER" && git pull && cd ..
+else
+    git clone "$GITHUB_LINK/$RESOURCES_FOLDER"
+fi
 
 # Move wallpapers
 mkdir -p "$HOME/Pictures"
@@ -414,7 +425,7 @@ sed -i "\|$SEARCH_LINE|d" "$TARGET_FILE"
 
 # Remove pacman dependencies
 for pkg in "${THEME_CHOOSER_DEPENDENCIES_PACMAN[@]}"; do
-    sudo -R --noconfirm "$pkg"
+    sudo pacman -Rs --noconfirm "$pkg"
 done
 
 

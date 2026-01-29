@@ -145,7 +145,13 @@ done
 
 
 # Download dotfiles
-git clone "$DOTFILES_REPO" "$DOTFILES_FOLDER"
+
+if [ -d "$DOTFILES_FOLDER" ]; then
+    echo "Folder $DOTFILES_FOLDER already exists, updating..."
+    cd "$RESOURCES_FOLDER" && git pull && cd ..
+else
+    git clone "$DOTFILES_REPO" "$DOTFILES_FOLDER"
+fi
 
 for item in "$DOTFILES_FOLDER"/*; do
     name=$(basename "$item")
@@ -194,7 +200,12 @@ touch "$DYNAMIC_BORDER"
 chmod -R +x "$CONFIG/scripts"
 
 # Download repo with utility (Images, sddm theme, .bashrc)
-git clone "$GITHUB_LINK/$RESOURCES_FOLDER"
+if [ -d "$RESOURCES_FOLDER" ]; then
+    echo "Folder $RESOURCES_FOLDER already exists, updating..."
+    cd "$RESOURCES_FOLDER" && git pull && cd ..
+else
+    git clone "$GITHUB_LINK/$RESOURCES_FOLDER"
+fi
 
 # Move wallpapers
 mkdir -p "$HOME/Pictures"
