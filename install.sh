@@ -257,6 +257,7 @@ done
 
 
 # Download dotfiles
+echo
 echo "Downloading dotfiles..."
 rm -rf "$DOTFILES_FOLDER"
 
@@ -311,6 +312,7 @@ touch "$CONFIG/hypr/$DYNAMIC_BORDER"
 chmod -R +x "$CONFIG/scripts"
 
 # Download repo with utility (Images, sddm theme, .bashrc)
+echo
 echo "Refreshing resources..."
 rm -rf "$RESOURCES_FOLDER"
 
@@ -335,7 +337,7 @@ chmod 440 "$SUDOERS_FILE"
 # Run script to choose a theme
 echo
 echo "Configuring theme"
-echo "Do you want to use a custom image? [y/N] "
+echo -n "Do you want to use a custom image? [y/N] "
 read -r use_custom < /dev/tty
 SELECTED_WALLPAPER="$HOME/Pictures/wallpapers/$DEFAULT_WALLPAPER"
 
@@ -360,6 +362,9 @@ if [[ "${use_custom,,}" == "y" ]]; then
         fi
     done
 fi
+
+# Start wallpaper daemon
+swww-daemon
 
 # Give user all permissions over copied files
 chown -R "$USER_NAME":"$USER_NAME" "$CONFIG"
@@ -510,7 +515,6 @@ ufw --force enable
 sudo rm -rf "$CONFIG/$INSTALL_SCRIPTS"
 sudo rm "$CONFIG/install.sh"
 sudo rm "$CONFIG/README.md"
-sudo rm "$CONFIG/QtProject.conf"
 
 # Clean sudo refresh added at the start
 kill $(jobs -p) 2>/dev/null || true
@@ -526,6 +530,8 @@ if [[ "$confirm" != "n" ]]; then
     echo "Rebooting system now..."
     reboot
 fi
+
+hyprctl reload
 
 echo "We suggest to close this terminal or run 'source ~/.bashrc' to complete the installation"
 echo "Enjoy your new setup!"
