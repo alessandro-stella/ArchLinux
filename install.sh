@@ -321,6 +321,11 @@ fi
 # Move wallpapers
 mkdir -p "$HOME/Pictures"
 mkdir -p "$HOME/Pictures/Screenshots"
+
+echo
+ls
+echo
+
 mv -n "$RESOURCES_FOLDER/wallpapers" "$HOME/Pictures/"
 
 # Move SDDM theme
