@@ -257,11 +257,12 @@ done
 
 
 # Download dotfiles
-if [ -d "$DOTFILES_FOLDER" ]; then
-    echo "Folder $DOTFILES_FOLDER already exists, updating..."
-    cd "$DOTFILES_FOLDER" && git pull && cd ..
-else
-    git clone "$DOTFILES_REPO" "$DOTFILES_FOLDER"
+echo "Downloading dotfiles..."
+rm -rf "$DOTFILES_FOLDER"
+
+if ! git clone "$GITHUB_LINK/$DOTFILES_FOLDER"; then
+    echo "Error: Failed to download dotfiles. Check your internet connection."
+    exit 1
 fi
 
 for item in "$DOTFILES_FOLDER"/*; do
@@ -292,7 +293,6 @@ for item in "$DOTFILES_FOLDER"/*; do
 done
 
 rm -rf "$HOME/$DOTFILES_FOLDER"
-rm -rf "$CONFIG/$INSTALL_SCRIPTS"
 
 # Create basic monitor configuration for hyprland
 touch "$CONFIG/hypr/$MONITOR_SETUP"
@@ -311,21 +311,17 @@ touch "$CONFIG/hypr/$DYNAMIC_BORDER"
 chmod -R +x "$CONFIG/scripts"
 
 # Download repo with utility (Images, sddm theme, .bashrc)
-if [ -d "$RESOURCES_FOLDER" ]; then
-    echo "Folder $RESOURCES_FOLDER already exists, updating..."
-    git -C "$RESOURCES_FOLDER" pull
-else
-    git clone "$GITHUB_LINK/$RESOURCES_FOLDER"
+echo "Refreshing resources..."
+rm -rf "$RESOURCES_FOLDER"
+
+if ! git clone "$GITHUB_LINK/$RESOURCES_FOLDER"; then
+    echo "Error: Failed to download resources. Check your internet connection."
+    exit 1
 fi
 
 # Move wallpapers
 mkdir -p "$HOME/Pictures"
 mkdir -p "$HOME/Pictures/Screenshots"
-
-echo
-pwd
-ls
-echo
 
 mv -n "$RESOURCES_FOLDER/wallpapers" "$HOME/Pictures/"
 
@@ -511,6 +507,7 @@ ufw default allow outgoing
 ufw --force enable
 
 # Delete installation script
+sudo rm -rf "$CONFIG/$INSTALL_SCRIPTS"
 sudo rm "$CONFIG/install.sh"
 sudo rm "$CONFIG/README.md"
 sudo rm "$CONFIG/QtProject.conf"
