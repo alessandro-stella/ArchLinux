@@ -242,6 +242,9 @@ chown "$USER_NAME":"$USER_NAME" "$HOME/.bashrc"
 echo "$USER_NAME ALL=(root) NOPASSWD: /usr/bin/cp $CONFIG/$WALLPAPER_SOURCE $SDDM_DEST" > "$SUDOERS_FILE"
 chmod 440 "$SUDOERS_FILE"
 
+echo "Cleaning up resources folder..."
+rm -rf "$HOME/$RESOURCES_FOLDER"
+
 # Run script to choose a theme
 echo
 echo "Configuring theme"

@@ -85,6 +85,7 @@ YAY_PACKAGES=(
   "oh-my-posh-bin"
   "wlogout"
   "wlogout-debug"
+  "swaylock-effects-git"
 )
 
 declare -A EXTERNAL_PACKAGES=(
