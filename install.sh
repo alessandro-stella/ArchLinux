@@ -364,7 +364,11 @@ if [[ "${use_custom,,}" == "y" ]]; then
 fi
 
 # Start wallpaper daemon
-swww-daemon
+if ! pgrep -x "swww-daemon" > /dev/null; then
+    echo "Starting swww-daemon..."
+    swww-daemon &
+    sleep 1
+fi
 
 # Give user all permissions over copied files
 chown -R "$USER_NAME":"$USER_NAME" "$CONFIG"
