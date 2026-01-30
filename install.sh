@@ -364,11 +364,8 @@ if [[ "${use_custom,,}" == "y" ]]; then
 fi
 
 # Start wallpaper daemon
-if ! pgrep -x "swww-daemon" > /dev/null; then
-    echo "Starting swww-daemon..."
-    swww-daemon &
-    sleep 1
-fi
+sudo -u "$USER_NAME" -H hyprctl dispatch exec "swww-daemon"
+sleep 1
 
 # Give user all permissions over copied files
 chown -R "$USER_NAME":"$USER_NAME" "$CONFIG"
@@ -389,7 +386,7 @@ fi
 mv -n "$RESOURCES_FOLDER/.bashrc" "$HOME/"
 
 # Set Adwaita-Dark
-gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+sudo -u "$USER_NAME" DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u $USER_NAME)/bus" gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
 # Ask for neovim
 echo -n "Do you want to configure OrionVim? [y/N] "
