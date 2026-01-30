@@ -252,7 +252,7 @@ if [[ "${use_custom,,}" == "y" ]]; then
 fi
 
 # Start wallpaper daemon
-sudo -u "$USER_NAME" -H hyprctl dispatch exec "swww-daemon"
+sudo -u "$USER_NAME" -H HYPRLAND_INSTANCE_SIGNATURE="$HYPRLAND_INSTANCE_SIGNATURE" hyprctl dispatch exec "swww-daemon"
 sleep 1
 
 # Give user all permissions over copied files
@@ -269,6 +269,10 @@ echo "Applying theme: $(basename "$SELECTED_WALLPAPER")"
 if ! sudo -u "$USER_NAME" -H "$CONFIG/scripts/$THEME_CHOOSER_MAIN_SCRIPT" "$SELECTED_WALLPAPER"; then
     echo "Warning: Theme chooser encountered an issue, but continuing installation..."
 fi
+
+# Force hyprland reload
+sudo -u "$USER_NAME" -H HYPRLAND_INSTANCE_SIGNATURE="$HYPRLAND_INSTANCE_SIGNATURE" hyprctl reload
+sudo -u "$USER_NAME" -H HYPRLAND_INSTANCE_SIGNATURE="$HYPRLAND_INSTANCE_SIGNATURE" hyprctl dispatch exec "killall waybar; waybar"
 
 # Moving and sourcing .bashrc
 mv -n "$RESOURCES_FOLDER/.bashrc" "$HOME/"
