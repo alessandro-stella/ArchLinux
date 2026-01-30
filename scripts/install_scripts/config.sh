@@ -75,6 +75,8 @@ PACMAN_PACKAGES=(
   "gtk4"
   "gnome-themes-extra"
   "fastfetch"
+  "brightnessctl"
+  "blueman"
 )
 
 YAY_PACKAGES=(

@@ -119,6 +119,8 @@ PACMAN_PACKAGES=(
   "gtk4"
   "gnome-themes-extra"
   "fastfetch"
+  "brightnessctl"
+  "blueman"
 )
 
 YAY_PACKAGES=(
@@ -546,6 +548,7 @@ ufw --force enable
 sudo rm -rf "$CONFIG/$INSTALL_SCRIPTS"
 sudo rm "$CONFIG/install.sh"
 sudo rm "$CONFIG/README.md"
+sudo rm -rf "$HOME/yay"
 
 # Clean sudo refresh added at the start
 kill $(jobs -p) 2>/dev/null || true
