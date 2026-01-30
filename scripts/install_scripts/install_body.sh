@@ -300,8 +300,9 @@ chown -R "$USER_NAME":"$USER_NAME" "$HOME/.cache"
 sudo -u "$USER_NAME" -H HYPRLAND_INSTANCE_SIGNATURE="$HYPRLAND_INSTANCE_SIGNATURE" hyprctl reload
 sudo -u "$USER_NAME" -H HYPRLAND_INSTANCE_SIGNATURE="$HYPRLAND_INSTANCE_SIGNATURE" hyprctl dispatch exec "killall waybar; waybar"
 
-# Set Adwaita-Dark
+# Set Adwaita-Dark theme and Adwaita icons
 sudo -u "$USER_NAME" DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u $USER_NAME)/bus" gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+sudo -u "$USER_NAME" DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u $USER_NAME)/bus" gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
 
 # Ask for neovim
 echo -n "Do you want to configure OrionVim? [y/N] "

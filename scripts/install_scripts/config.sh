@@ -44,7 +44,6 @@ PACMAN_PACKAGES=(
   "git-lfs"
   "base-devel"
   "btop"
-  "thunar"
   "waybar"
   "swaync"
   "libnotify"
@@ -77,6 +76,10 @@ PACMAN_PACKAGES=(
   "fastfetch"
   "brightnessctl"
   "blueman"
+  "nautilus"
+  "evince"
+  "libreoffice-still"
+  "libreoffice-still-it"
 )
 
 YAY_PACKAGES=(
