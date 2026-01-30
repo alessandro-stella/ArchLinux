@@ -23,24 +23,16 @@ CONFIG="$HOME/.config"
 
 # Try to recover the signature if not explicitly passed
 if [ -z "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
-    USER_ID=$(id -u "$USER_NAME")
-    HYPR_SOCKET=$(ls /run/user/$USER_ID/hypr/ 2>/dev/null | head -n 1)
-    
-    if [ -n "$HYPR_SOCKET" ]; then
-        export HYPRLAND_INSTANCE_SIGNATURE="$HYPR_SOCKET"
-        echo "Auto-detected Hyprland signature: $HYPRLAND_INSTANCE_SIGNATURE"
-    else
-        echo
-        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-        echo "CRITICAL ERROR: HYPRLAND_INSTANCE_SIGNATURE variable not found."
-        echo "Unable to communicate with Hyprland from this sudo session."
-        echo
-        echo "Please relaunch the script using this command:"
-        echo "curl -fsSL https://raw.githubusercontent.com/alessandro-stella/dotfiles/master/install.sh | sudo HYPRLAND_INSTANCE_SIGNATURE=\$HYPRLAND_INSTANCE_SIGNATURE bash"
-        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-        echo
-        exit 1
-    fi
+  echo
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo "CRITICAL ERROR: HYPRLAND_INSTANCE_SIGNATURE variable not found."
+  echo "Unable to communicate with Hyprland from this sudo session."
+  echo
+  echo "Please relaunch the script using this command:"
+  echo "curl -fsSL https://raw.githubusercontent.com/alessandro-stella/dotfiles/master/install.sh | sudo HYPRLAND_INSTANCE_SIGNATURE=\$HYPRLAND_INSTANCE_SIGNATURE bash"
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo
+  exit 1
 fi
 
 # Loop to keep sudo privileges active
