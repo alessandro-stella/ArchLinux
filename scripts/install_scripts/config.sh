@@ -52,6 +52,8 @@ PACMAN_PACKAGES=(
   "github-cli"
   "hyprshot"
   "loupe"
+  "qt5-graphicaleffects"
+  "qt6-5compat"
   "qt5-quickcontrols"
   "qt5-quickcontrols2"
   "qt6-wayland"

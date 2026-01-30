@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 set -Eeuo pipefail
 trap 'echo "Error at line $LINENO. Aborting."; exit 1' ERR
 
@@ -9,7 +10,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 if [ -z "$SUDO_USER" ]; then
-    echo "Error: could not recognize the user who run this script"
+    echo "Error: could not recognize the user who ran this script"
     exit 1
 fi
 
@@ -18,7 +19,29 @@ USER_NAME="$SUDO_USER"
 HOME="/home/$USER_NAME"
 CONFIG="$HOME/.config"
 
-# Loop to keep sudo active
+# Try to recover the signature if not explicitly passed
+if [ -z "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
+    USER_ID=$(id -u "$USER_NAME")
+    HYPR_SOCKET=$(ls /run/user/$USER_ID/hypr/ 2>/dev/null | head -n 1)
+    
+    if [ -n "$HYPR_SOCKET" ]; then
+        export HYPRLAND_INSTANCE_SIGNATURE="$HYPR_SOCKET"
+        echo "Auto-detected Hyprland signature: $HYPRLAND_INSTANCE_SIGNATURE"
+    else
+        echo
+        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        echo "CRITICAL ERROR: HYPRLAND_INSTANCE_SIGNATURE variable not found."
+        echo "Unable to communicate with Hyprland from this sudo session."
+        echo
+        echo "Please relaunch the script using this command:"
+        echo "curl -fsSL https://raw.githubusercontent.com/alessandro-stella/dotfiles/master/install.sh | sudo HYPRLAND_INSTANCE_SIGNATURE=\$HYPRLAND_INSTANCE_SIGNATURE bash"
+        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        echo
+        exit 1
+    fi
+fi
+
+# Loop to keep sudo privileges active
 sudo -v
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
@@ -217,6 +240,11 @@ mv -n "$RESOURCES_FOLDER/wallpapers" "$HOME/Pictures/"
 
 # Move SDDM theme
 mv -n "$RESOURCES_FOLDER/$SDDM_THEME" "$SDDM_THEME_FOLDER/"
+echo -e "[Theme]\nCurrent=$SDDM_THEME" | sudo tee /etc/sddm.conf
+
+# Overriding current .bashrc
+mv -f "$RESOURCES_FOLDER/.bashrc" "$HOME/"
+chown "$USER_NAME":"$USER_NAME" "$HOME/.bashrc"
 
 # Adding sudoers rule for theme changer
 echo "$USER_NAME ALL=(root) NOPASSWD: /usr/bin/cp $CONFIG/$WALLPAPER_SOURCE $SDDM_DEST" > "$SUDOERS_FILE"
@@ -270,15 +298,15 @@ if ! sudo -u "$USER_NAME" -H "$CONFIG/scripts/$THEME_CHOOSER_MAIN_SCRIPT" "$SELE
     echo "Warning: Theme chooser encountered an issue, but continuing installation..."
 fi
 
+echo "Fixing cache permissions..."
+chown -R "$USER_NAME":"$USER_NAME" "$HOME/.cache"
+
 # Force hyprland reload
 sudo -u "$USER_NAME" -H HYPRLAND_INSTANCE_SIGNATURE="$HYPRLAND_INSTANCE_SIGNATURE" hyprctl reload
 sudo -u "$USER_NAME" -H HYPRLAND_INSTANCE_SIGNATURE="$HYPRLAND_INSTANCE_SIGNATURE" hyprctl dispatch exec "killall waybar; waybar"
 
-# Moving and sourcing .bashrc
-mv -n "$RESOURCES_FOLDER/.bashrc" "$HOME/"
-
 # Set Adwaita-Dark
-sudo -u "$USER_NAME" DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u $USER_NAME)/bus" gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+sudo -u "$USER_NAME" DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u $USER_NAME)/bus" gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
 
 # Ask for neovim
 echo -n "Do you want to configure OrionVim? [y/N] "
@@ -345,8 +373,6 @@ if [[ "$confirm" != "n" ]]; then
     echo "Rebooting system now..."
     reboot
 fi
-
-hyprctl reload
 
 echo "We suggest to close this terminal or run 'source ~/.bashrc' to complete the installation"
 echo "Enjoy your new setup!"
