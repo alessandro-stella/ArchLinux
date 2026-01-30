@@ -145,9 +145,9 @@ done
 
 
 # Download dotfiles
-if [ -d "$RESOURCES_FOLDER" ]; then
-    echo "Folder $RESOURCES_FOLDER already exists, updating..."
-    cd "$RESOURCES_FOLDER" && git pull && cd ..
+if [ -d "$DOTFILES_FOLDER" ]; then
+    echo "Folder $DOTFILES_FOLDER already exists, updating..."
+    cd "$DOTFILES_FOLDER" && git pull && cd ..
 else
     git clone "$DOTFILES_REPO" "$DOTFILES_FOLDER"
 fi
