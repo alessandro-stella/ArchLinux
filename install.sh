@@ -291,7 +291,7 @@ for item in "$DOTFILES_FOLDER"/*; do
     fi
 done
 
-rm -rf "$DOTFILES_FOLDER"
+rm -rf "$HOME/$DOTFILES_FOLDER"
 rm -rf "$CONFIG/$INSTALL_SCRIPTS"
 
 # Create basic monitor configuration for hyprland
