@@ -252,7 +252,7 @@ chown -R "$USER_NAME":"$USER_NAME" "$CONFIG"
 chown -R "$USER_NAME":"$USER_NAME" "$HOME/Pictures"
 
 # Run script to create thumbnails
-bash "$config/scripts/$thumbnail_generator"
+bash "$CONFIG/scripts/$THUMBNAIL_GENERATOR"
 
 # Generate and apply theme
 echo
