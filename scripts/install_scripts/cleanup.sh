@@ -12,7 +12,6 @@ SEARCH_LINE='include ~/.cache/wallust/colors-kitty.conf'
 SOURCE_FILE="$HOME/.cache/wallust/colors-kitty.conf"
 CONTENT=$(<"$SOURCE_FILE")
 
-
 awk -v search="$SEARCH_LINE" -v replacement="$CONTENT" '
     $0 == search { print replacement; next }
     { print }
@@ -48,8 +47,10 @@ awk -v search="$SEARCH_LINE" -v replacement="$CONTENT" '
     { print }
 ' "$TARGET_FILE" > "${TARGET_FILE}.tmp" && mv "${TARGET_FILE}.tmp" "$TARGET_FILE"
 
-SEARCH_LINE='bind = $mainMod SHIFT, T, exec, sh $HOME/.config/scripts/theme_chooser.sh # Change theme based on wallpaper'
-sed -i "\|$SEARCH_LINE|d" "$TARGET_FILE"
+sed -i "\|bind = $mainMod SHIFT, T, exec, sh $HOME/.config/scripts/theme_chooser.sh # Change theme based on wallpaper|d" "$TARGET_FILE"
+
+# Remove useless script call
+sed -i "\|exec-once = ~/.config/scripts/generate_thumbnails.sh|d" "$TARGET_FILE"
 
 
 # Remove pacman dependencies

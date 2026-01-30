@@ -121,6 +121,9 @@ PACMAN_PACKAGES=(
   "brightnessctl"
   "blueman"
   "nautilus"
+  "gvfs"
+  "gvfs-mtp"
+  "ntfs-3g"
   "evince"
   "libreoffice-still"
   "libreoffice-still-it"
@@ -466,7 +469,6 @@ SEARCH_LINE='include ~/.cache/wallust/colors-kitty.conf'
 SOURCE_FILE="$HOME/.cache/wallust/colors-kitty.conf"
 CONTENT=$(<"$SOURCE_FILE")
 
-
 awk -v search="$SEARCH_LINE" -v replacement="$CONTENT" '
     $0 == search { print replacement; next }
     { print }
@@ -502,8 +504,10 @@ awk -v search="$SEARCH_LINE" -v replacement="$CONTENT" '
     { print }
 ' "$TARGET_FILE" > "${TARGET_FILE}.tmp" && mv "${TARGET_FILE}.tmp" "$TARGET_FILE"
 
-SEARCH_LINE='bind = $mainMod SHIFT, T, exec, sh $HOME/.config/scripts/theme_chooser.sh # Change theme based on wallpaper'
-sed -i "\|$SEARCH_LINE|d" "$TARGET_FILE"
+sed -i "\|bind = $mainMod SHIFT, T, exec, sh $HOME/.config/scripts/theme_chooser.sh # Change theme based on wallpaper|d" "$TARGET_FILE"
+
+# Remove useless script call
+sed -i "\|exec-once = ~/.config/scripts/generate_thumbnails.sh|d" "$TARGET_FILE"
 
 
 # Remove pacman dependencies
@@ -548,11 +552,15 @@ ufw default deny incoming
 ufw default allow outgoing
 ufw --force enable
 
-# Delete installation script
+# Delete useless resources
 sudo rm -rf "$CONFIG/$INSTALL_SCRIPTS"
+sudo rm -rf "$CONFIG/scripts/update-configs.sh"
 sudo rm "$CONFIG/install.sh"
 sudo rm "$CONFIG/README.md"
 sudo rm -rf "$HOME/yay"
+
+# Delete useless hyprland settings
+sed -i "\|exec-once = ~/.config/scripts/update_configs.sh|d" "$TARGET_FILE"
 
 # Clean sudo refresh added at the start
 kill $(jobs -p) 2>/dev/null || true

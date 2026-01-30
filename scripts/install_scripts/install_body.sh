@@ -350,11 +350,15 @@ ufw default deny incoming
 ufw default allow outgoing
 ufw --force enable
 
-# Delete installation script
+# Delete useless resources
 sudo rm -rf "$CONFIG/$INSTALL_SCRIPTS"
+sudo rm -rf "$CONFIG/scripts/update-configs.sh"
 sudo rm "$CONFIG/install.sh"
 sudo rm "$CONFIG/README.md"
 sudo rm -rf "$HOME/yay"
+
+# Delete useless hyprland settings
+sed -i "\|exec-once = ~/.config/scripts/update_configs.sh|d" "$TARGET_FILE"
 
 # Clean sudo refresh added at the start
 kill $(jobs -p) 2>/dev/null || true
