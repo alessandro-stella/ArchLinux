@@ -201,7 +201,7 @@ chmod -R +x "$CONFIG/scripts"
 # Download repo with utility (Images, sddm theme, .bashrc)
 if [ -d "$RESOURCES_FOLDER" ]; then
     echo "Folder $RESOURCES_FOLDER already exists, updating..."
-    cd "$RESOURCES_FOLDER" && git pull && cd ..
+    git -C "$RESOURCES_FOLDER" pull
 else
     git clone "$GITHUB_LINK/$RESOURCES_FOLDER"
 fi
@@ -211,6 +211,7 @@ mkdir -p "$HOME/Pictures"
 mkdir -p "$HOME/Pictures/Screenshots"
 
 echo
+pwd
 ls
 echo
 
