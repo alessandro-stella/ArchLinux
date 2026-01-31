@@ -71,7 +71,7 @@ tooltip label {
 #pulseaudio,
 #network,
 #tray,
-#temperature,
+#custom-temperature,
 #workspaces,
 #backlight,
 #keyboard-state label.locked {
@@ -84,7 +84,7 @@ tooltip label {
 
 #tray,
 #custom-lock_screen,
-#temperature,
+#custom-temperature,
 #backlight,
 #custom-launch_rofi,
 #cpu {
@@ -106,7 +106,7 @@ tooltip label {
   margin-right: 10px;
 }
 
-#temperature.critical {
+#custom-temperature.critical {
   color: #e92d4d;
 }
 

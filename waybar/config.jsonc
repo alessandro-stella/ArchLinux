@@ -23,7 +23,7 @@
   "modules-right": [
     "keyboard-state",
     "keyboard-state#num",
-    "temperature",
+    "custom/temperature",
     "battery",
     "backlight",
     "pulseaudio",
@@ -107,11 +107,10 @@
       "unlocked": ""
     }
   },
-  "temperature": {
-    "thermal-zone": 1,
-    "format": " {temperatureC}°C",
-    "critical-threshold": 70,
-    "format-critical": " {temperatureC}°C",
+  "custom/temperature": {
+  "exec": "~/.config/waybar/scripts/temperature",
+    "interval": 5,
+    "return-type": "json",
     "on-click": "kitty --title btop sh -c 'btop'"
   },
   "battery": {
