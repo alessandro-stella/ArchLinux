@@ -78,6 +78,7 @@ THEME_CHANGER_SCRIPTS="theme_changer"
 # General packages and apps
 PACMAN_PACKAGES=(
   "xdg-desktop-portal-gtk"
+  "adw-gtk3"
   "pacman-contrib"
   "git-lfs"
   "base-devel"
@@ -416,9 +417,11 @@ chown -R "$USER_NAME":"$USER_NAME" "$HOME/.cache"
 sudo -u "$USER_NAME" -H HYPRLAND_INSTANCE_SIGNATURE="$HYPRLAND_INSTANCE_SIGNATURE" hyprctl reload
 sudo -u "$USER_NAME" -H HYPRLAND_INSTANCE_SIGNATURE="$HYPRLAND_INSTANCE_SIGNATURE" hyprctl dispatch exec "killall waybar; waybar"
 
-# Set Adwaita-Dark theme and Adwaita icons
-sudo -u "$USER_NAME" DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u $USER_NAME)/bus" gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+# Set theme and icons
+sudo -u "$USER_NAME" DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u $USER_NAME)/bus" gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'
 sudo -u "$USER_NAME" DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u $USER_NAME)/bus" gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
+sudo -u "$USER_NAME" DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u $USER_NAME)/bus" gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+
 
 # Ask for neovim
 echo -n "Do you want to configure OrionVim? [y/N] "

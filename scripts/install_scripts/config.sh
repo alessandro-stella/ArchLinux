@@ -34,6 +34,7 @@ THEME_CHANGER_SCRIPTS="theme_changer"
 # General packages and apps
 PACMAN_PACKAGES=(
   "xdg-desktop-portal-gtk"
+  "adw-gtk3"
   "pacman-contrib"
   "git-lfs"
   "base-devel"

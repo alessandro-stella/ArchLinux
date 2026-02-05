@@ -38,13 +38,9 @@
   color: #bbbbbb;
 }
 
-.widget-title {
-  background-color: violet;
-}
-
-.notification-icon {
-  margin-right: 10px;
-  border-radius: 5px;
+.notification-default-action image,
+.notification-default-action .image {
+  margin-right: 15px;
 }
 
 .close-button:hover {

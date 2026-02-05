@@ -20,6 +20,7 @@ nautilus
 xfce4
 xsettingsd
 QtProject.conf
+user-dirs.locale
 
 /code-flags.conf
 /user-dirs.dirs
