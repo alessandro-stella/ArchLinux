@@ -1,8 +1,8 @@
 #!/bin/bash
 
 colors_file="$HOME/.cache/wallust/colors.json"
-template="$HOME/.config/oh-my-posh/themes/themeTemplate.omp.json"
-output="$HOME/.config/oh-my-posh/themes/EDM115-newline.omp.json"
+template="$HOME/.config/oh-my-posh/themes/template.omp.json"
+output="$HOME/.config/oh-my-posh/themes/current_theme.omp.json"
 lighten_percent=${1:-1}
 
 if [ ! -f "$colors_file" ] || [ ! -f "$template" ]; then

@@ -115,13 +115,13 @@ if [ -z "$color2" ]; then
   dominant2="${color_info[$color2]##*|}"
 fi
 
-# --- OUTPUT TO SCREEN ---
+# === OUTPUT TO SCREEN ===
 echo -e "\n🎨 Selected colors:"
 print_color_box "$color1" "Color1 (Dominant $dominant1)"
 print_color_box "$color2" "Color2 (Dominant $dominant2)"
 echo ""
 
-# --- WLOGOUT ---
+# === WLOGOUT ===
 hex_rgb="${color2//#/}"
 r=$((16#${hex_rgb:0:2}))
 g=$((16#${hex_rgb:2:2}))
@@ -130,13 +130,16 @@ rgb_string="$r, $g, $b"
 sed "s/__BUTTON_ACCENT__/${rgb_string}/g" "$TEMPLATE" > "$OUTPUT"
 echo "✅ Wlogout CSS updated with RGB color: $rgb_string"
 
-# --- WAYBAR ---
+# === WAYBAR ===
 "$(dirname "$0")/waybar_changer.sh" "$color1"
 
-# --- OH-MY-POSH ---
+# === OH-MY-POSH ===
 "$(dirname "$0")/oh_my_posh_changer.sh"
 
-# --- HYPRLAND ---
+# === SWAYNC ===
+"$(dirname "$0")/swaync_changer.sh" "$color1"
+
+# === HYPRLAND ===
 hex_with_opacity() {
   local hex="${1//#/}"
   echo "${hex}${OPACITY}"

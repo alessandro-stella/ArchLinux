@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # Cleanup script if user dislikes the theme changer
 
 rm -rf "$HOME/Pictures/wallpapers"
@@ -33,7 +32,8 @@ awk -v search="$SEARCH_LINE" -v replacement="$CONTENT" '
 # Remove templates
 rm -f "$CONFIG/waybar/template.css"
 rm -f "$CONFIG/wlogout/template.css"
-rm -f "$CONFIG/oh-my-posh/themes/themeTemplate.omp.json"
+rm -f "$CONFIG/swaync/template.css"
+rm -f "$CONFIG/oh-my-posh/themes/template.omp.json"
 
 
 # Change hyprland border
@@ -49,28 +49,25 @@ awk -v search="$SEARCH_LINE" -v replacement="$CONTENT" '
 
 sed -i "\|bind = $mainMod SHIFT, T, exec, sh $HOME/.config/scripts/theme_chooser.sh # Change theme based on wallpaper|d" "$TARGET_FILE"
 
+
 # Remove useless script call
 sed -i "\|exec-once = ~/.config/scripts/generate_thumbnails.sh|d" "$TARGET_FILE"
 
 
 # Remove pacman dependencies
-for pkg in "${THEME_CHOOSER_DEPENDENCIES_PACMAN[@]}"; do
+for pkg in "${THEME_CHANGER_DEPENDENCIES_PACMAN[@]}"; do
     sudo pacman -Rs --noconfirm "$pkg"
 done
 
 
 # Remove yay dependencies
-for pkg in "${THEME_CHOOSER_DEPENDENCIES_YAY[@]}"; do
+for pkg in "${THEME_CHANGER_DEPENDENCIES_YAY[@]}"; do
     sudo -u "$USER_NAME" -H yay -R --noconfirm "$pkg"
 done
 
 
 # Removing useless scripts
-for script in "${THEME_CHOOSER_SCRIPTS[@]}"; do
-    if [ -f "$script" ]; then
-      rm -f "$script"
-    fi
-done
+rm -rf "$THEME_CHANGER_SCRIPTS"
 
 
 # Removing sudoers rule

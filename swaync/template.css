@@ -1,0 +1,113 @@
+:root {
+  --border-color: __BORDER_COLOR__;
+  --background: __BACKGROUND_COLOR__;
+  --text-color: #eeeeee;
+}
+
+* {
+  font-family: "Inter", "Roboto", "sans-serif";
+  margin: 0;
+  padding: 0;
+  all: unset;
+}
+
+.floating-notifications .notification-row {
+  outline: none;
+  margin: 10px;
+
+  margin-bottom: 0px;
+}
+
+.notification {
+  margin: 0px;
+  border-radius: 5px;
+  border: 2px solid var(--border-color);
+  background: var(--background);
+  color: var(--text-color);
+  padding: 10px;
+}
+
+.summary {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--text-color);
+}
+
+.body {
+  font-size: 0.95rem;
+  color: #bbbbbb;
+}
+
+.widget-title {
+  background-color: violet;
+}
+
+.notification-icon {
+  margin-right: 10px;
+  border-radius: 5px;
+}
+
+.close-button:hover {
+  box-shadow: none;
+  background: var(--background);
+  transition: all 0.15s ease-in-out;
+  border: none;
+}
+
+.notification-content {
+  border-radius: 0px;
+}
+
+.notification-default-action,
+.notification-action {
+  margin: 0;
+  box-shadow: none;
+  color: var(--text-color);
+}
+
+.notification-default-action:hover,
+.notification-action:hover {
+  -gtk-icon-effect: none;
+}
+
+.notification-default-action {
+  border-radius: 8px;
+}
+
+.notification-default-action:not(:only-child) {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.notification-action {
+  border-radius: 0px;
+  border-top: none;
+  border-right: none;
+}
+
+.close-button {
+  background: transparent;
+  color: var(--text-color);
+  text-shadow: none;
+  padding: 0;
+  border-radius: 100%;
+  margin-top: 5px;
+  margin-right: 5px;
+  box-shadow: none;
+  border: none;
+  min-width: 24px;
+  min-height: 24px;
+
+  opacity: 0;
+
+  transition: all 0.2s ease-in-out;
+}
+
+.notification-row:hover .close-button {
+  opacity: 0.5;
+}
+
+.notification-row:hover .close-button:hover {
+  opacity: 1;
+  color: var(--bg-color);
+}

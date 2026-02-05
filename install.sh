@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# --- UNIFIED SCRIPT (AUTO-GENERATED) ---
+# === UNIFIED SCRIPT (AUTO-GENERATED) ===
 
 
 set -Eeuo pipefail
@@ -42,7 +42,7 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 echo
 echo "Starting install script..."
 
-### --- START CONFIG.SH --- ###
+### === START CONFIG.SH === ###
 
 # General configuration
 GITHUB_LINK="https://github.com/alessandro-stella"
@@ -62,28 +62,22 @@ DEFAULT_WALLPAPER="City-Rain.png"
 SUDOERS_FILE="/etc/sudoers.d/sddm-wallpaper"
 WALLPAPER_SOURCE="wallpaper/blurred_wallpaper.png"
 SDDM_DEST="$SDDM_THEME_FOLDER/$SDDM_THEME/wallpaper.png"
-THEME_CHOOSER_MAIN_SCRIPT="wallpaper_changer.sh"
+THEME_CHANGER_MAIN_SCRIPT="theme_changer/wallpaper_changer.sh"
 THUMBNAIL_GENERATOR="generate_thumbnails.sh"
 
-THEME_CHOOSER_DEPENDENCIES_PACMAN=(
+THEME_CHANGER_DEPENDENCIES_PACMAN=(
    "imagemagick"
 )
 
-THEME_CHOOSER_DEPENDENCIES_YAY=(
+THEME_CHANGER_DEPENDENCIES_YAY=(
    "wallust"
 )
 
-THEME_CHOOSER_SCRIPTS=(
-  "$THEME_CHOOSER_MAIN_SCRIPT"
-  "$THUMBNAIL_GENERATOR"
-  "oh_my_posh_changer.sh"
-  "palette_changer.sh"
-  "theme_chooser.sh"
-  "waybar_changer.sh"
-)
+THEME_CHANGER_SCRIPTS="theme_changer"
 
 # General packages and apps
 PACMAN_PACKAGES=(
+  "xdg-desktop-portal-gtk"
   "pacman-contrib"
   "git-lfs"
   "base-devel"
@@ -123,10 +117,12 @@ PACMAN_PACKAGES=(
   "nautilus"
   "gvfs"
   "gvfs-mtp"
+  "udisks2"
   "ntfs-3g"
   "evince"
   "libreoffice-still"
   "libreoffice-still-it"
+  "npm"
 )
 
 YAY_PACKAGES=(
@@ -158,12 +154,9 @@ NEOVIM_PACKAGES=(
   "maven"
   "tailwindcss-language-server"
   "vscode-html-languageserver"
-  "rust"
-  "go"
-  "swi-prolog"
   "noto-fonts-emoji"
 )
-### --- END CONFIG.SH --- ###
+### === END CONFIG.SH === ###
 
 cd "$HOME" || exit 1
 echo "Current working directory: $PWD"
@@ -412,7 +405,7 @@ bash "$CONFIG/scripts/$THUMBNAIL_GENERATOR"
 echo
 echo "Applying theme: $(basename "$SELECTED_WALLPAPER")"
 
-if ! sudo -u "$USER_NAME" -H "$CONFIG/scripts/$THEME_CHOOSER_MAIN_SCRIPT" "$SELECTED_WALLPAPER"; then
+if ! sudo -u "$USER_NAME" -H "$CONFIG/scripts/$THEME_CHANGER_MAIN_SCRIPT" "$SELECTED_WALLPAPER"; then
     echo "Warning: Theme chooser encountered an issue, but continuing installation..."
 fi
 
@@ -455,8 +448,7 @@ read -r confirm_theme < /dev/tty
 confirm_theme="${confirm_theme,,}"
 
 if [[ "$confirm_theme" == "n" ]]; then
-### --- START CLEANUP.SH --- ###
-
+### === START CLEANUP.SH === ###
 # Cleanup script if user dislikes the theme changer
 
 rm -rf "$HOME/Pictures/wallpapers"
@@ -490,7 +482,8 @@ awk -v search="$SEARCH_LINE" -v replacement="$CONTENT" '
 # Remove templates
 rm -f "$CONFIG/waybar/template.css"
 rm -f "$CONFIG/wlogout/template.css"
-rm -f "$CONFIG/oh-my-posh/themes/themeTemplate.omp.json"
+rm -f "$CONFIG/swaync/template.css"
+rm -f "$CONFIG/oh-my-posh/themes/template.omp.json"
 
 
 # Change hyprland border
@@ -506,35 +499,32 @@ awk -v search="$SEARCH_LINE" -v replacement="$CONTENT" '
 
 sed -i "\|bind = $mainMod SHIFT, T, exec, sh $HOME/.config/scripts/theme_chooser.sh # Change theme based on wallpaper|d" "$TARGET_FILE"
 
+
 # Remove useless script call
 sed -i "\|exec-once = ~/.config/scripts/generate_thumbnails.sh|d" "$TARGET_FILE"
 
 
 # Remove pacman dependencies
-for pkg in "${THEME_CHOOSER_DEPENDENCIES_PACMAN[@]}"; do
+for pkg in "${THEME_CHANGER_DEPENDENCIES_PACMAN[@]}"; do
     sudo pacman -Rs --noconfirm "$pkg"
 done
 
 
 # Remove yay dependencies
-for pkg in "${THEME_CHOOSER_DEPENDENCIES_YAY[@]}"; do
+for pkg in "${THEME_CHANGER_DEPENDENCIES_YAY[@]}"; do
     sudo -u "$USER_NAME" -H yay -R --noconfirm "$pkg"
 done
 
 
 # Removing useless scripts
-for script in "${THEME_CHOOSER_SCRIPTS[@]}"; do
-    if [ -f "$script" ]; then
-      rm -f "$script"
-    fi
-done
+rm -rf "$THEME_CHANGER_SCRIPTS"
 
 
 # Removing sudoers rule
 if [ -f "$SUDOERS_FILE" ]; then
     rm -f "$SUDOERS_FILE"
 fi
-### --- END CLEANUP.SH --- ###
+### === END CLEANUP.SH === ###
 fi
 
 # Enable and start TLP

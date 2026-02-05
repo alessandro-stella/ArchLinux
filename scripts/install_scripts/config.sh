@@ -18,28 +18,22 @@ DEFAULT_WALLPAPER="City-Rain.png"
 SUDOERS_FILE="/etc/sudoers.d/sddm-wallpaper"
 WALLPAPER_SOURCE="wallpaper/blurred_wallpaper.png"
 SDDM_DEST="$SDDM_THEME_FOLDER/$SDDM_THEME/wallpaper.png"
-THEME_CHOOSER_MAIN_SCRIPT="wallpaper_changer.sh"
+THEME_CHANGER_MAIN_SCRIPT="theme_changer/wallpaper_changer.sh"
 THUMBNAIL_GENERATOR="generate_thumbnails.sh"
 
-THEME_CHOOSER_DEPENDENCIES_PACMAN=(
+THEME_CHANGER_DEPENDENCIES_PACMAN=(
    "imagemagick"
 )
 
-THEME_CHOOSER_DEPENDENCIES_YAY=(
+THEME_CHANGER_DEPENDENCIES_YAY=(
    "wallust"
 )
 
-THEME_CHOOSER_SCRIPTS=(
-  "$THEME_CHOOSER_MAIN_SCRIPT"
-  "$THUMBNAIL_GENERATOR"
-  "oh_my_posh_changer.sh"
-  "palette_changer.sh"
-  "theme_chooser.sh"
-  "waybar_changer.sh"
-)
+THEME_CHANGER_SCRIPTS="theme_changer"
 
 # General packages and apps
 PACMAN_PACKAGES=(
+  "xdg-desktop-portal-gtk"
   "pacman-contrib"
   "git-lfs"
   "base-devel"
@@ -79,10 +73,12 @@ PACMAN_PACKAGES=(
   "nautilus"
   "gvfs"
   "gvfs-mtp"
+  "udisks2"
   "ntfs-3g"
   "evince"
   "libreoffice-still"
   "libreoffice-still-it"
+  "npm"
 )
 
 YAY_PACKAGES=(
@@ -114,8 +110,5 @@ NEOVIM_PACKAGES=(
   "maven"
   "tailwindcss-language-server"
   "vscode-html-languageserver"
-  "rust"
-  "go"
-  "swi-prolog"
   "noto-fonts-emoji"
 )

@@ -289,7 +289,7 @@ bash "$CONFIG/scripts/$THUMBNAIL_GENERATOR"
 echo
 echo "Applying theme: $(basename "$SELECTED_WALLPAPER")"
 
-if ! sudo -u "$USER_NAME" -H "$CONFIG/scripts/$THEME_CHOOSER_MAIN_SCRIPT" "$SELECTED_WALLPAPER"; then
+if ! sudo -u "$USER_NAME" -H "$CONFIG/scripts/$THEME_CHANGER_MAIN_SCRIPT" "$SELECTED_WALLPAPER"; then
     echo "Warning: Theme chooser encountered an issue, but continuing installation..."
 fi
 

@@ -1,4 +1,4 @@
-/* ---- Configuration ---- */
+/* === Configuration === */
 
 configuration {
     modi:                       "drun";
@@ -10,10 +10,10 @@ configuration {
     me-accept-entry:            "MousePrimary";
 }
 
-/* ---- Load wal colors ---- */
+/* === Load wal colors === */
 @theme "~/.cache/wallust/colors-rofi.rasi"
 
-/* ---- Global Properties ---- */
+/* === Global Properties === */
 * {
     background-alt:              @color1;
     selected:                    @color12;
@@ -25,7 +25,7 @@ configuration {
     border-color:                @selected;
 }
 
-/* ---- Window ---- */
+/* === Window === */
 window {
     // Default
     enabled:                    true;
@@ -43,7 +43,7 @@ window {
     background-color:           @background;
 }
 
-/* ----- Main Box ----- */
+/* ===- Main Box ===- */
 mainbox {
 	padding:					 12px;
     enabled:                     true;
@@ -53,7 +53,7 @@ mainbox {
 }
 
 
-/* ---- Inputbar ---- */
+/* === Inputbar === */
 inputbar {
     enabled:                     true;
     padding:                     10px 10px 50px 10px;
@@ -65,7 +65,7 @@ inputbar {
     background-image:            url("~/.config/wallpaper/current_wallpaper.png", width);
 }
 
-/* ---- Entry input ---- */
+/* === Entry input === */
 entry {
     enabled:                     true;
     expand:                      false;
@@ -79,7 +79,7 @@ entry {
     placeholder-color:           inherit;
 }
 
-/* ---- Listbox ---- */
+/* === Listbox === */
 listbox {
     spacing:                     10px;
     padding:                     10px;
@@ -88,7 +88,7 @@ listbox {
     children:                    [ "message", "listview" ];
 }
 
-/* ---- Listview ---- */
+/* === Listview === */
 listview {
     enabled:                     true;
     columns:                     5;
@@ -109,13 +109,13 @@ listview {
     border:                      0px;
 }
 
-/* ---- Dummy ---- */
+/* === Dummy === */
 dummy {
     expand:                      true;
     background-color:            transparent;
 }
 
-/* ---- Scrollbar ---- */
+/* === Scrollbar === */
 scrollbar {
     border:       				0px;
     border-radius:				10px;
@@ -125,7 +125,7 @@ scrollbar {
     padding:      				0;
 }
 
-/* ---- Elements ---- */
+/* === Elements === */
 element {
     enabled:                     true;
     orientation: 				 vertical;
@@ -193,7 +193,7 @@ element-text {
     horizontal-align:            0.5;
 }
 
-/* ---- Message ---- */
+/* === Message === */
 message {
     background-color:            transparent;
     border:                      0px;
