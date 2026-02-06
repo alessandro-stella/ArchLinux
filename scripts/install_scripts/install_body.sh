@@ -339,19 +339,28 @@ if [[ "$confirm_theme" == "n" ]]; then
 fi
 
 # Enable and start TLP
-echo "Enabling and starting TLP..."
-systemctl enable tlp.service
-systemctl start tlp.service
+echo -n "Do you want to enable TLP (power management)? [y/N] "
+read -r confirm_tlp < /dev/tty
+confirm_tlp="${confirm_tlp,,}"
+
+if [[ "$confirm_tlp" == "y" ]]; then
+    systemctl enable tlp.service
+    systemctl start tlp.service
+fi
 
 # Enable and start UFW
-echo "Enabling and starting UFW..."
-systemctl enable ufw.service
-systemctl start ufw.service
+echo -n "Do you want to enable UFW firewall? [Y/n] "
+read -r confirm_ufw < /dev/tty
+confirm_ufw="${confirm_ufw,,}"
 
-# Set default firewall rules (deny incoming, allow outgoing)
-ufw default deny incoming
-ufw default allow outgoing
-ufw --force enable
+if [[ "$confirm_ufw" == "y" || -z "$confirm_ufw" ]]; then
+    echo "Enabling and configuring UFW..."
+    systemctl enable ufw.service
+    systemctl start ufw.service
+    ufw default deny incoming
+    ufw default allow outgoing
+    ufw --force enable
+fi
 
 # Delete useless resources
 sudo rm -rf "$CONFIG/$INSTALL_SCRIPTS"

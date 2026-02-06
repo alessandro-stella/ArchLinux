@@ -85,6 +85,8 @@ PACMAN_PACKAGES=(
   "libreoffice-still"
   "libreoffice-still-it"
   "npm"
+  "jdk-openjdk"
+  "neovim"
 )
 
 YAY_PACKAGES=(
@@ -107,7 +109,6 @@ NEOVIM_FOLDER="OrionVim"
 NEOVIM_REPO="$GITHUB_LINK/$NEOVIM_FOLDER"
 
 NEOVIM_PACKAGES=(
-  "neovim"
   "tree-sitter-cli"
   "stylua"
   "python-black"
