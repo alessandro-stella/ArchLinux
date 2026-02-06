@@ -1,9 +1,8 @@
 [sddm]: https://github.com/user-attachments/assets/d752e47d-3af8-4949-a48f-b1fa697abcb1
 [wlogout]: https://github.com/user-attachments/assets/a62059bd-0f3e-4463-b050-03b97ffd153e
 [shell]: https://github.com/user-attachments/assets/f81e980f-ee29-49d7-b496-395b90dd3425
-[theme_changer]: https://github.com/user-attachments/assets/ff9fb61f-6d26-4b36-bf20-965440a01e6d
+[theme_changer]: https://github.com/user-attachments/assets/ff9fb61f-6d26-4b36-bf20-965440a01e6
 [showcase]: https://github.com/user-attachments/assets/732fd1c3-df08-4414-b5b7-d441e79b26a9
-
 
 # Dotfiles for custom Arch Linux + Hyprland config
 
@@ -11,21 +10,22 @@
 This configuration prioritizes simplicity and usability for developers, without sacrificing customizability and aesthetic.
 
 ## Configuration Overview
-<a href="[sddm]">
-  <img src="[sddm]" alt="SDDM Greeter" width="150">
+<a href="https://github.com/user-attachments/assets/d752e47d-3af8-4949-a48f-b1fa697abcb1">
+  <img src="https://github.com/user-attachments/assets/d752e47d-3af8-4949-a48f-b1fa697abcb1" alt="SDDM Greeter" width="150">
 </a>
-<a href="[wlogout]">
-  <img src="[wlogout]" alt="wlogout" width="150">
+<a href="https://github.com/user-attachments/assets/a62059bd-0f3e-4463-b050-03b97ffd153e">
+  <img src="https://github.com/user-attachments/assets/a62059bd-0f3e-4463-b050-03b97ffd153e" alt="wlogout" width="150">
 </a>
-<a href="[shell]">
-  <img src="[shell]" alt="Shell" width="150">
+<a href="https://github.com/user-attachments/assets/f81e980f-ee29-49d7-b496-395b90dd3425">
+  <img src="https://github.com/user-attachments/assets/f81e980f-ee29-49d7-b496-395b90dd3425" alt="Shell" width="150">
 </a>
-<a href="[theme_changer]">
-  <img src="[theme_changer]" alt="Theme changer" width="150">
+<a href="https://github.com/user-attachments/assets/ff9fb61f-6d26-4b36-bf20-965440a01e6">
+  <img src="https://github.com/user-attachments/assets/ff9fb61f-6d26-4b36-bf20-965440a01e6" alt="Theme changer" width="150">
 </a>
-<a href="[showcase]">
-  <img src="[showcase]" alt="General showcase" width="150">
+<a href="https://github.com/user-attachments/assets/732fd1c3-df08-4414-b5b7-d441e79b26a9">
+  <img src="https://github.com/user-attachments/assets/732fd1c3-df08-4414-b5b7-d441e79b26a9" alt="General showcase" width="150">
 </a>
+
 
 
 
