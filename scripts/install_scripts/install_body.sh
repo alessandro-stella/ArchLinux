@@ -3,6 +3,66 @@
 set -Eeuo pipefail
 trap 'echo "Error at line $LINENO. Aborting."; exit 1' ERR
 
+# Utility functions
+spinner() {
+    local pid=$1
+    local msg=$2
+    local spinstr='|/-\'
+    printf "%s  " "$msg"
+    while kill -0 "$pid" 2>/dev/null; do
+        local temp=${spinstr#?}
+        printf "[%c]" "$spinstr"
+        local spinstr=$temp${spinstr%"$temp"}
+        sleep 0.1
+        printf "\b\b\b"
+    done
+
+    wait "$pid"
+    local exit_code=$?
+
+    if [ $exit_code -eq 0 ]; then
+        printf "\r%s  [DONE]\033[K\n" "$msg"
+    else
+        printf "\r%s  [FAILED]\033[K\n" "$msg"
+        return 1
+    fi
+}
+
+execute_silent() {
+    local msg=$1
+    shift
+    "$@" > /dev/null 2>&1 &
+    spinner $! "$msg" || exit 1
+}
+
+install_pkg() {
+    local manager=$1
+    shift
+    local pkgs=("$@")
+    local total=${#pkgs[@]}
+    local count=0
+
+    for pkg in "${pkgs[@]}"; do
+        count=$((count + 1))
+        percent=$((count * 100 / total))
+        echo -ne "\r[${percent}%] Installing package: ${pkg}..."
+        
+        if [ "$manager" == "pacman" ]; then
+            sudo pacman -S --noconfirm "$pkg" > /dev/null 2>&1
+        else
+            sudo -u "$USER_NAME" -H yay -S --noconfirm "$pkg" > /dev/null 2>&1
+        fi
+        
+        echo -ne "\r\033[K" 
+    done
+    echo -e "\r[100%] Installation of $manager packages completed."
+}
+
+# ============================
+# Start of installation script
+# ============================
+
+
 # Check if user used sudo to run the script
 if [ "$EUID" -ne 0 ]; then
     echo "You need sudo permissions to run this script!"
@@ -14,10 +74,16 @@ if [ -z "$SUDO_USER" ]; then
     exit 1
 fi
 
+
+# Clean start
+clear
+
+
 # Defining local variables
 USER_NAME="$SUDO_USER"
 HOME="/home/$USER_NAME"
 CONFIG="$HOME/.config"
+
 
 # Try to recover the signature if not explicitly passed
 if [ -z "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
@@ -33,6 +99,7 @@ if [ -z "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
   exit 1
 fi
 
+
 # Loop to keep sudo privileges active
 sudo -v
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
@@ -45,33 +112,25 @@ source ./config.sh
 cd "$HOME" || exit 1
 echo "Current working directory: $PWD"
 
+
 # Check git
 if ! command -v git >/dev/null 2>&1; then
-    echo "git not found, proceeding with installation..."
-    sudo pacman -S --noconfirm git
+    execute_silent "Installing git" sudo pacman -S --noconfirm git
 fi
+
 
 # Check yay
 if ! command -v yay >/dev/null 2>&1; then
-    echo "yay not found, proceeding with installation..."
-
-    # Cloning or updating yay
+    echo "Installing yay..."
     if [ ! -d "yay" ]; then
-        sudo -u "$USER_NAME" git clone https://aur.archlinux.org/yay.git
-    else
-        echo "yay already cloned, handling ownership and updating..."
-        sudo -u "$USER_NAME" git config --global --add safe.directory "$HOME/yay"
-        cd yay
-        sudo -u "$USER_NAME" git pull
-        cd ..
+        sudo -u "$USER_NAME" git clone https://aur.archlinux.org/yay.git > /dev/null 2>&1
     fi
-
-    # Build and installation
     cd yay
     chown -R "$USER_NAME":"$USER_NAME" .
-    sudo -u "$USER_NAME" makepkg -si --noconfirm
+    execute_silent "Building yay (this may take a while)" sudo -u "$USER_NAME" makepkg -si --noconfirm
     cd "$HOME"
 fi
+
 
 # Pacman packages
 if [ "${#PACMAN_PACKAGES[@]}" -gt 0 ]; then
@@ -85,6 +144,7 @@ if [ "${#PACMAN_PACKAGES[@]}" -gt 0 ]; then
     done
 fi
 
+
 # Yay packages
 if [ "${#YAY_PACKAGES[@]}" -gt 0 ]; then
     echo
@@ -97,6 +157,7 @@ if [ "${#YAY_PACKAGES[@]}" -gt 0 ]; then
     done
 fi
 
+
 # External packages
 if [ "${#EXTERNAL_PACKAGES[@]}" -gt 0 ]; then
     echo
@@ -108,6 +169,7 @@ fi
 
 echo
 
+
 # Ask confirm
 echo -n "Do you want to proceed with the installation? [y/N] "
 read -r confirm < /dev/tty
@@ -117,6 +179,7 @@ if [[ "$confirm" != "y" ]]; then
     echo "Installation aborted!"
     exit 0
 fi
+
 
 # Install pacman packages
 PACMAN_TO_INSTALL=()
@@ -128,8 +191,10 @@ for pkg in "${PACMAN_PACKAGES[@]}"; do
 done
 
 if [ "${#PACMAN_TO_INSTALL[@]}" -gt 0 ]; then
-    sudo pacman -S --noconfirm "${PACMAN_TO_INSTALL[@]}"
+    echo "Starting Pacman installation..."
+    install_pkg "pacman" "${PACMAN_TO_INSTALL[@]}"
 fi
+
 
 # Install yay packages
 YAY_TO_INSTALL=()
@@ -141,8 +206,10 @@ for pkg in "${YAY_PACKAGES[@]}"; do
 done
 
 if [ "${#YAY_TO_INSTALL[@]}" -gt 0 ]; then
-    sudo -u "$USER_NAME" -H yay -S --noconfirm "${YAY_TO_INSTALL[@]}"
+    echo "Starting Yay installation..."
+    install_pkg "yay" "${YAY_TO_INSTALL[@]}"
 fi
+
 
 # Install external packages
 is_installed() {
@@ -159,44 +226,41 @@ for pkg in "${!EXTERNAL_PACKAGES[@]}"; do
 done
 
 
-# Download dotfiles
+# --- Download dotfiles ---
 echo
-echo "Downloading dotfiles..."
 rm -rf "$DOTFILES_FOLDER"
 
-if ! git clone "$GITHUB_LINK/$DOTFILES_FOLDER"; then
+execute_silent "Downloading dotfiles" git clone "$GITHUB_LINK/$DOTFILES_FOLDER"
+
+if [ ! -d "$DOTFILES_FOLDER" ]; then
     echo "Error: Failed to download dotfiles. Check your internet connection."
     exit 1
 fi
 
-for item in "$DOTFILES_FOLDER"/*; do
-    name=$(basename "$item")
+items=("$DOTFILES_FOLDER"/*)
+total_items=${#items[@]}
+current_item=0
 
-    if [ -d "$item" ]; then
-        # Remove existing folder in ~/.config
-        if [ -d "$CONFIG/$name" ]; then
-            echo "Replacing $CONFIG/$name"
+echo "Deploying configurations..."
+
+for item in "${items[@]}"; do
+    name=$(basename "$item")
+    current_item=$((current_item + 1))
+    percent=$((current_item * 100 / total_items))
+
+    printf "\r[%d%%] Moving: %s\033[K" "$percent" "$name"
+
+    {
+        if [ -e "$CONFIG/$name" ]; then
             rm -rf "$CONFIG/$name"
         fi
-
-        # Copy folder
-        echo "Moving directory $name in $CONFIG"
         mv "$item" "$CONFIG/"
-
-    elif [ -f "$item" ]; then
-        # Remove existing file
-        if [ -f "$CONFIG/$name" ]; then
-            echo "Replacing file $CONFIG/$name"
-            rm -f "$CONFIG/$name"
-        fi
-
-        # Move file
-        echo "Moving $name in $CONFIG"
-        mv "$item" "$CONFIG/"
-    fi
+    } > /dev/null 2>&1
 done
 
+printf "\r[100%%] Configurations deployed.\n"
 rm -rf "$HOME/$DOTFILES_FOLDER"
+
 
 # Create basic monitor configuration for hyprland
 touch "$CONFIG/hypr/$MONITOR_SETUP"
@@ -214,36 +278,45 @@ touch "$CONFIG/hypr/$DYNAMIC_BORDER"
 # Add exec permissions to all scripts
 chmod -R +x "$CONFIG/scripts"
 
-# Download repo with utility (Images, sddm theme, .bashrc)
+
+# Download additional resources
 echo
-echo "Refreshing resources..."
 rm -rf "$RESOURCES_FOLDER"
 
-if ! git clone "$GITHUB_LINK/$RESOURCES_FOLDER"; then
+execute_silent "Refreshing resources" git clone "$GITHUB_LINK/$RESOURCES_FOLDER"
+
+if [ ! -d "$RESOURCES_FOLDER" ]; then
     echo "Error: Failed to download resources. Check your internet connection."
     exit 1
 fi
 
-# Move wallpapers
-mkdir -p "$HOME/Pictures"
-mkdir -p "$HOME/Pictures/Screenshots"
+echo "Installing system assets and wallpapers... "
 
-mv -n "$RESOURCES_FOLDER/wallpapers" "$HOME/Pictures/"
+{
+    # Create necessary directories
+    mkdir -p "$HOME/Pictures/Screenshots"
 
-# Move SDDM theme
-mv -n "$RESOURCES_FOLDER/$SDDM_THEME" "$SDDM_THEME_FOLDER/"
-echo -e "[Theme]\nCurrent=$SDDM_THEME" | sudo tee /etc/sddm.conf
+    # Move wallpapers
+    mv -n "$RESOURCES_FOLDER/wallpapers" "$HOME/Pictures/"
 
-# Overriding current .bashrc
-mv -f "$RESOURCES_FOLDER/.bashrc" "$HOME/"
-chown "$USER_NAME":"$USER_NAME" "$HOME/.bashrc"
+    # Install and configure SDDM theme
+    mv -n "$RESOURCES_FOLDER/$SDDM_THEME" "$SDDM_THEME_FOLDER/"
+    echo -e "[Theme]\nCurrent=$SDDM_THEME" | tee /etc/sddm.conf
 
-# Adding sudoers rule for theme changer
-echo "$USER_NAME ALL=(root) NOPASSWD: /usr/bin/cp $CONFIG/$WALLPAPER_SOURCE $SDDM_DEST" > "$SUDOERS_FILE"
-chmod 440 "$SUDOERS_FILE"
+    # Override current .bashrc and fix ownership
+    mv -f "$RESOURCES_FOLDER/.bashrc" "$HOME/"
+    chown "$USER_NAME":"$USER_NAME" "$HOME/.bashrc"
 
-echo "Cleaning up resources folder..."
-rm -rf "$HOME/$RESOURCES_FOLDER"
+    # Add sudoers rule for the theme changer script
+    echo "$USER_NAME ALL=(root) NOPASSWD: /usr/bin/cp $CONFIG/$WALLPAPER_SOURCE $SDDM_DEST" > "$SUDOERS_FILE"
+    chmod 440 "$SUDOERS_FILE"
+
+    # Clean up temporary resource folder
+    rm -rf "$HOME/$RESOURCES_FOLDER"
+} > /dev/null 2>&1
+
+echo "Done"
+
 
 # Run script to choose a theme
 echo
@@ -274,17 +347,17 @@ if [[ "${use_custom,,}" == "y" ]]; then
     done
 fi
 
+
 # Start wallpaper and notification daemon
 sudo -u "$USER_NAME" -H HYPRLAND_INSTANCE_SIGNATURE="$HYPRLAND_INSTANCE_SIGNATURE" hyprctl dispatch exec "swww-daemon"
 sudo -u "$USER_NAME" -H HYPRLAND_INSTANCE_SIGNATURE="$HYPRLAND_INSTANCE_SIGNATURE" hyprctl dispatch exec "swaync"
 sleep 1
 
+
 # Give user all permissions over copied files
 chown -R "$USER_NAME":"$USER_NAME" "$CONFIG"
 chown -R "$USER_NAME":"$USER_NAME" "$HOME/Pictures"
 
-# Run script to create thumbnails
-bash "$CONFIG/scripts/$THUMBNAIL_GENERATOR"
 
 # Generate and apply theme
 echo
@@ -297,37 +370,40 @@ fi
 echo "Fixing cache permissions..."
 chown -R "$USER_NAME":"$USER_NAME" "$HOME/.cache"
 
-# Force hyprland reload
-sudo -u "$USER_NAME" -H HYPRLAND_INSTANCE_SIGNATURE="$HYPRLAND_INSTANCE_SIGNATURE" hyprctl reload
-sudo -u "$USER_NAME" -H HYPRLAND_INSTANCE_SIGNATURE="$HYPRLAND_INSTANCE_SIGNATURE" hyprctl dispatch exec "killall waybar; waybar"
 
 # Set theme and icons
 sudo -u "$USER_NAME" DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u $USER_NAME)/bus" gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'
 sudo -u "$USER_NAME" DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u $USER_NAME)/bus" gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
 sudo -u "$USER_NAME" DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u $USER_NAME)/bus" gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
+# Force hyprland reload
+sudo -u "$USER_NAME" -H HYPRLAND_INSTANCE_SIGNATURE="$HYPRLAND_INSTANCE_SIGNATURE" hyprctl reload
+sudo -u "$USER_NAME" -H HYPRLAND_INSTANCE_SIGNATURE="$HYPRLAND_INSTANCE_SIGNATURE" hyprctl dispatch exec "killall waybar; waybar"
+
 
 # Ask for neovim
-echo -n "Do you want to configure OrionVim? [y/N] "
+echo -n "Do you want to install/replace your config with OrionVim? [y/N] "
 read -r confirm < /dev/tty
 confirm="${confirm,,}"
 
 if [[ "$confirm" == "y" ]]; then
-  sudo rm -rf "$CONFIG/nvim"
+    rm -rf "$CONFIG/nvim" > /dev/null 2>&1
+    rm -rf "$HOME/.local/share/nvim" > /dev/null 2>&1 
 
-  if [ "${#NEOVIM_PACKAGES[@]}" -gt 0 ]; then
-    echo "Installing Neovim dependencies: ${NEOVIM_PACKAGES[*]}"
-    sudo pacman -S --noconfirm "${NEOVIM_PACKAGES[@]}"
-  fi
+    if [ "${#NEOVIM_PACKAGES[@]}" -gt 0 ]; then
+        echo "Installing Neovim dependencies..."
+        install_pkg "pacman" "${NEOVIM_PACKAGES[@]}"
+    fi
 
-  if [ ! -d "$CONFIG/nvim" ]; then
-      echo "Cloning OrionVim repository..."
-      sudo -u "$USER_NAME" git clone "$NEOVIM_REPO" "$CONFIG/nvim"
-      sudo rm -rf "$CONFIG/nvim/.git" 
-  else
-      echo "Neovim configuration folder already exists. Skipping clone."
-  fi
+    if execute_silent "Cloning OrionVim repository" sudo -u "$USER_NAME" git clone "$NEOVIM_REPO" "$CONFIG/nvim"; then
+        rm -rf "$CONFIG/nvim/.git" > /dev/null 2>&1
+        
+        chown -R "$USER_NAME":"$USER_NAME" "$CONFIG/nvim" > /dev/null 2>&1
+    else
+        echo "Error: OrionVim cloning failed. Check your internet connection or repository URL."
+    fi
 fi
+
 
 # Ask for theme changer
 echo -n "Do you want to keep the theme changer? [Y/n] "

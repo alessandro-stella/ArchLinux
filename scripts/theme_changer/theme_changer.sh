@@ -52,6 +52,8 @@ generate_menu() {
 }
 
 main() {
+    "$(dirname "$0")/generate_thumbnails.sh" || { echo "Error during thumbnails generation" >&2; exit 1; }
+
     if [[ "${1:-}" == "--refresh" ]]; then
         generate_cache
     elif ! check_cache; then

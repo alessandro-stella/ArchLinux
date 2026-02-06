@@ -50,10 +50,6 @@ awk -v search="$SEARCH_LINE" -v replacement="$CONTENT" '
 sed -i "\|bind = $mainMod SHIFT, T, exec, sh $HOME/.config/scripts/theme_chooser.sh # Change theme based on wallpaper|d" "$TARGET_FILE"
 
 
-# Remove useless script call
-sed -i "\|exec-once = ~/.config/scripts/generate_thumbnails.sh|d" "$TARGET_FILE"
-
-
 # Remove pacman dependencies
 for pkg in "${THEME_CHANGER_DEPENDENCIES_PACMAN[@]}"; do
     sudo pacman -Rs --noconfirm "$pkg"
