@@ -78,7 +78,7 @@ THEME_CHANGER_SCRIPTS="theme_changer"
 # General packages and apps
 PACMAN_PACKAGES=(
   "xdg-desktop-portal-gtk"
-  "adw-gtk3"
+  "adw-gtk-theme"
   "pacman-contrib"
   "git-lfs"
   "base-devel"
@@ -396,8 +396,9 @@ if [[ "${use_custom,,}" == "y" ]]; then
     done
 fi
 
-# Start wallpaper daemon
+# Start wallpaper and notification daemon
 sudo -u "$USER_NAME" -H HYPRLAND_INSTANCE_SIGNATURE="$HYPRLAND_INSTANCE_SIGNATURE" hyprctl dispatch exec "swww-daemon"
+sudo -u "$USER_NAME" -H HYPRLAND_INSTANCE_SIGNATURE="$HYPRLAND_INSTANCE_SIGNATURE" hyprctl dispatch exec "swaync"
 sleep 1
 
 # Give user all permissions over copied files
