@@ -262,10 +262,10 @@ printf "\r[100%%] Configurations deployed.\n"
 rm -rf "$HOME/$DOTFILES_FOLDER"
 
 
-# Create basic monitor configuration for hyprland
-touch "$CONFIG/hypr/$MONITOR_SETUP"
-echo "# Basic monitor configuration" > "$CONFIG/hypr/$MONITOR_SETUP"
-echo "monitor = , preferred, auto, 1" >> "$CONFIG/hypr/$MONITOR_SETUP"
+# Configure per-device settings
+touch "$CONFIG/hypr/$CUSTOM_SETTINGS"
+echo "# Basic monitor configuration" > "$CONFIG/hypr/$CUSTOM_SETTINGS"
+echo "monitor = , preferred, auto, 1" >> "$CONFIG/hypr/$CUSTOM_SETTINGS"
 
 # Remove line from hyprland.conf
 TARGET_FILE="$CONFIG/hypr/hyprland.conf"

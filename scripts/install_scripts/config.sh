@@ -5,7 +5,7 @@ GITHUB_LINK="https://github.com/alessandro-stella"
 DOTFILES_FOLDER="dotfiles"
 DOTFILES_REPO="$GITHUB_LINK/$DOTFILES_FOLDER"
 INSTALL_SCRIPTS="scripts/install_scripts"
-MONITOR_SETUP="monitor-setup.conf"
+CUSTOM_SETTINGS="device-settings.conf"
 DYNAMIC_BORDER="dynamic-border.conf"
 
 # Additional resources (wallpaper, .bashrc etc)
