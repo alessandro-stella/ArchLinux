@@ -26,7 +26,7 @@ user-dirs.locale
 /user-dirs.dirs
 /trashrc
 /hypr/dynamic-border.conf
-/hypr/monitor-setup.conf
+/hypr/device-settings.conf
 
 /wallpaper
 /wlogout/style.css
