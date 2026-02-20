@@ -87,6 +87,7 @@ PACMAN_PACKAGES=(
   "npm"
   "jdk-openjdk"
   "neovim"
+  "batsignal"
 )
 
 YAY_PACKAGES=(
