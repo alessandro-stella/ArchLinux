@@ -11,13 +11,11 @@
     "hyprland/workspaces",
     "cpu",
     "memory",
-    "disk"
+    "disk",
+    "custom/updates"
   ],
   "modules-center": [
-    "custom/lock_screen",
-    "custom/updates",
-    "clock",
-    "custom/power_btn"
+    "clock"
   ],
   "modules-right": [
     "custom/notification",
@@ -28,22 +26,9 @@
     "pulseaudio#microphone",
     "tray"
   ],
-  "hyprland/window": {
-    "format": "{}"
-  },
   "custom/launch_rofi": {
     "format": "",
     "on-click": "pkill rofi; rofi -show drun",
-    "tooltip": false
-  },
-  "custom/lock_screen": {
-    "format": "",
-    "on-click": "sh -c '(sleep 0.5s; swaylock -K)' & disown",
-    "tooltip": false
-  },
-  "custom/power_btn": {
-    "format": "",
-    "on-click": "sh -c '(sleep 0.5s; wlogout --protocol layer-shell)' & disown",
     "tooltip": false
   },
   "cpu": {
@@ -69,11 +54,11 @@
     "on-click": "kitty --title btop sh -c 'btop'"
   },
   "custom/updates": {
-    "format": "{}",
+    "format": " {}",
     "exec": "~/.config/waybar/scripts/update-sys",
     "on-click": "~/.config/waybar/scripts/update-sys update",
     "interval": 300,
-    "tooltip": true
+    "max-length": 10
   },
   "hyprland/workspaces": {
     "disable-scroll": true,
@@ -85,12 +70,11 @@
     "spacing": 10
   },
   "clock": {
-    "format": "{:%H:%M}",
-    "tooltip": true,
-    "tooltip-format": "{:%A, %d %B %Y}"
+    "format": "{:%H:%M • %d %b %Y}",
+    "tooltip": false
   },
   "custom/notification": {
-    "tooltip": false,
+    "tooltip": true,
     "format": "{icon}",
     "format-icons": {
       "notification": "󰂚",
@@ -104,9 +88,9 @@
     },
     "return-type": "json",
     "exec-if": "which swaync-client",
-    "exec": "swaync-client -swb",
-    "on-click": "swaync-client -t -sw > /dev/null",
-    "on-click-right": "swaync-client -d -sw > /dev/null",
+    "exec": "swaync-client -swb | jq --unbuffered --compact-output 'if .alt | contains(\"dnd\") then .tooltip=\"Do Not Disturb: On\" else .tooltip=\"Do Not Disturb: Off\" end'",
+    "on-click": "swaync-client -d -sw > /dev/null",
+    "on-click-right": "swaync-client -t -sw > /dev/null",
     "escape": true
   },
   "custom/temperature": {

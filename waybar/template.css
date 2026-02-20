@@ -1,3 +1,4 @@
+/* --- Global Properties --- */
 * {
   border: none;
   border-radius: 0;
@@ -7,6 +8,7 @@
   min-height: 0;
 }
 
+/* --- Main Window --- */
 window#waybar {
   background: rgba(0, 0, 0, 0);
   color: #cdd6f4;
@@ -16,6 +18,7 @@ window#waybar.empty #window {
   background: rgba(0, 0, 0, 0);
 }
 
+/* --- Tooltips --- */
 tooltip {
   background: __BACKGROUND_COLOR__;
   border-radius: 7px;
@@ -28,63 +31,37 @@ tooltip label {
   color: #cdd6f4;
 }
 
-#workspaces button {
-  padding: 5px;
-  color: #313244;
-  margin-right: 5px;
-  transition: all 0.15s ease;
-}
-
-#workspaces button.active {
-  color: #a6adc8;
-}
-
-#workspaces button.focused {
-  color: #a6adc8;
-  background: #eba0ac;
-  border-radius: 7px;
-}
-
-#workspaces button.urgent {
-  color: #11111b;
-  background: #a6e3a1;
-  border-radius: 7px;
-}
-
-#workspaces button:hover {
-  background: #3a3b4e;
-  color: #cdd6f4;
-  border-radius: 7px;
-}
-
+/* --- Modules: Common Base --- */
 #custom-launch_rofi,
-#custom-lock_screen,
-#custom-power_btn,
-#custom-power_profile,
-#custom-weather,
 #window,
 #cpu,
 #disk,
-#custom-updates,
 #memory,
 #clock,
 #battery,
 #pulseaudio,
-#network,
 #tray,
 #custom-temperature,
 #workspaces,
 #backlight,
-#custom-notification {
+#custom-notification,
+#custom-updates {
   background: __BACKGROUND_COLOR__;
-  opacity: 0.8;
   padding: 0px 10px;
   margin-top: 10px;
-  border: 0px;
 }
 
-#tray,
-#custom-lock_screen,
+/* --- Layout: Borders & Rounding --- */
+
+/* Fully Rounded (7px) */
+#clock,
+#custom-updates,
+#window,
+#tray {
+  border-radius: 7px;
+}
+
+/* Left-Side Rounded (Start of Group) */
 #backlight,
 #custom-launch_rofi,
 #cpu,
@@ -92,12 +69,7 @@ tooltip label {
   border-radius: 7px 0px 0px 7px;
 }
 
-#tray {
-  border-radius: 7px;
-  padding-left: 10px;
-  margin-right: 10px;
-}
-
+/* Right-Side Rounded (End of Group) */
 #custom-power_btn,
 #workspaces,
 #pulseaudio.microphone,
@@ -107,7 +79,70 @@ tooltip label {
   margin-right: 10px;
 }
 
-#custom-temperature.critical {
+/* --- Workspaces Section --- */
+#workspaces {
+  padding-right: 0px;
+  padding-left: 5px;
+}
+
+#workspaces button {
+  padding: 5px 10px;
+  color: #6c7086;
+  margin: 0px;
+  border-radius: 7px;
+  transition: all 0.15s ease;
+}
+
+#workspaces button:hover {
+  color: #a6adc8;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+#workspaces button.active,
+#workspaces button.focused {
+  color: #cdd6f4;
+}
+
+#workspaces button.urgent {
+  color: #e92d4d;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+}
+
+/* --- Module Colors & States --- */
+
+#window {
+  margin-right: 20px;
+}
+
+#custom-launch_rofi {
+  color: __LOGO_COLOR__;
+  margin-left: 10px;
+}
+
+#pulseaudio {
+  color: #89b4fa;
+}
+
+#pulseaudio.microphone {
+  color: #cba6f7;
+}
+
+#battery {
+  color: #a6e3a1;
+}
+
+#custom-power_profile {
+  color: #a6e3a1;
+}
+
+/* Critical/Warning States */
+#custom-temperature.critical,
+#battery.critical,
+#custom-notification.dnd-notification,
+#custom-notification.dnd-none,
+#custom-notification.dnd-inhibited-notification,
+#custom-notification.dnd-inhibited-none {
   color: #e92d4d;
 }
 
@@ -115,55 +150,16 @@ tooltip label {
   color: #ffdb58;
 }
 
-#battery.critical {
-  color: #e92d4d;
+/* Animations & Specific Padding */
+#custom-notification {
+  transition: color 0.15s ease-in-out;
 }
 
-#workspaces {
-  padding-right: 0px;
-  padding-left: 5px;
-}
-
-#custom-power_profile {
-  color: #a6e3a1;
-  border-left: 0px;
-  border-right: 0px;
-}
-
-#window {
-  border-radius: 7px;
-  margin-left: 0px;
-  margin-right: 20px;
-}
-
-#custom-launch_rofi {
-  color: __LOGO_COLOR__;
-  margin-left: 10px;
-  border-right: 0px;
-}
-
-#pulseaudio {
-  color: #89b4fa;
-  border-left: 0px;
-  border-right: 0px;
-}
-
-#pulseaudio.microphone {
-  color: #cba6f7;
-  border-left: 0px;
-  border-right: 0px;
-}
-
-#battery {
-  color: #a6e3a1;
-  border-left: 0px;
-}
-
+/* Minor fix to better align icon */
 #custom-notification.dnd-notification,
 #custom-notification.dnd-none,
 #custom-notification.dnd-inhibited-notification,
 #custom-notification.dnd-inhibited-none {
-  color: #e92d4d;
   padding-right: 11px;
   padding-left: 9px;
 }
