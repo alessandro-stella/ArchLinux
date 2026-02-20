@@ -32,6 +32,7 @@ tooltip label {
   padding: 5px;
   color: #313244;
   margin-right: 5px;
+  transition: all 0.15s ease;
 }
 
 #workspaces button.active {
@@ -51,7 +52,7 @@ tooltip label {
 }
 
 #workspaces button:hover {
-  background: #11111b;
+  background: #3a3b4e;
   color: #cdd6f4;
   border-radius: 7px;
 }
@@ -74,7 +75,7 @@ tooltip label {
 #custom-temperature,
 #workspaces,
 #backlight,
-#keyboard-state label.locked {
+#custom-notification {
   background: __BACKGROUND_COLOR__;
   opacity: 0.8;
   padding: 0px 10px;
@@ -84,10 +85,10 @@ tooltip label {
 
 #tray,
 #custom-lock_screen,
-#custom-temperature,
 #backlight,
 #custom-launch_rofi,
-#cpu {
+#cpu,
+#custom-notification {
   border-radius: 7px 0px 0px 7px;
 }
 
@@ -158,11 +159,11 @@ tooltip label {
   border-left: 0px;
 }
 
-#keyboard-state {
-  border-radius: 7px;
-}
-
-#keyboard-state label.locked {
-  margin-right: 10px;
-  border-radius: 7px;
+#custom-notification.dnd-notification,
+#custom-notification.dnd-none,
+#custom-notification.dnd-inhibited-notification,
+#custom-notification.dnd-inhibited-none {
+  color: #e92d4d;
+  padding-right: 11px;
+  padding-left: 9px;
 }

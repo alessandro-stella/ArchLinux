@@ -11,8 +11,7 @@
     "hyprland/workspaces",
     "cpu",
     "memory",
-    "disk",
-    "hyprland/window"
+    "disk"
   ],
   "modules-center": [
     "custom/lock_screen",
@@ -21,8 +20,7 @@
     "custom/power_btn"
   ],
   "modules-right": [
-    "keyboard-state",
-    "keyboard-state#num",
+    "custom/notification",
     "custom/temperature",
     "battery",
     "backlight",
@@ -91,24 +89,28 @@
     "tooltip": true,
     "tooltip-format": "{:%A, %d %B %Y}"
   },
-  "keyboard-state": {
-    "capslock": true,
+  "custom/notification": {
+    "tooltip": false,
     "format": "{icon}",
     "format-icons": {
-      "locked": "CAPS ",
-      "unlocked": ""
-    }
-  },
-  "keyboard-state#num": {
-    "numlock": true,
-    "format": "{icon}",
-    "format-icons": {
-      "locked": "NUM ",
-      "unlocked": ""
-    }
+      "notification": "󰂚",
+      "none": "󰂚",
+      "dnd-notification": "󰂛",
+      "dnd-none": "󰂛",
+      "inhibited-notification": "󰂚",
+      "inhibited-none": "󰂚",
+      "dnd-inhibited-notification": "󰂛",
+      "dnd-inhibited-none": "󰂛"
+    },
+    "return-type": "json",
+    "exec-if": "which swaync-client",
+    "exec": "swaync-client -swb",
+    "on-click": "swaync-client -t -sw > /dev/null",
+    "on-click-right": "swaync-client -d -sw > /dev/null",
+    "escape": true
   },
   "custom/temperature": {
-  "exec": "~/.config/waybar/scripts/temperature",
+    "exec": "~/.config/waybar/scripts/temperature",
     "interval": 5,
     "return-type": "json",
     "on-click": "kitty --title btop sh -c 'btop'"
