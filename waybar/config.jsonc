@@ -103,7 +103,7 @@
     "states": {
       "good": 100,
       "warning": 30,
-      "critical": 15
+      "critical": 10
     },
     "format": "{icon} {capacity}%",
     "format-charging": " {capacity}%",
