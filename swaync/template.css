@@ -3,7 +3,7 @@
   --background: __BACKGROUND_COLOR__;
   --text-color: #eeeeee;
   --border-radius: 5px;
-  --border-color: __BORDER_COLOR__;
+  --accent-color: __ACCENT_COLOR__;
   --icon-size: 24px;
 }
 
@@ -24,7 +24,7 @@
 .notification {
   margin: 0px;
   border-radius: var(--border-radius);
-  border: 2px solid var(--border-color);
+  border: 2px solid var(--accent-color);
   background: var(--background);
   color: var(--text-color);
   padding: 10px;
@@ -117,7 +117,7 @@
 .control-center {
   background: var(--background);
   color: var(--text-color);
-  border: 2px solid var(--border-color);
+  border: 2px solid var(--accent-color);
   border-radius: var(--border-radius);
   margin: -5px;
 }
@@ -138,7 +138,7 @@
 .widget {
   margin: 4px 8px 0 8px;
   padding: 12px 12px 16px 12px;
-  border-bottom: 1px solid alpha(var(--border-color), 0.5);
+  border-bottom: 1px solid alpha(var(--accent-color), 0.5);
 }
 
 .widget:first-child {
@@ -152,7 +152,8 @@
 }
 
 .widget-title>label {
-  font-size: 1.1rem;
+  font-size: 1.35rem;
+  font-weight: bold;
   margin-right: 8px;
 }
 
@@ -160,13 +161,13 @@
   margin-left: 8px;
   padding: 4px 8px;
   border-radius: var(--border-radius);
-  background-color: alpha(var(--text-color), 0.25);
+  background-color: alpha(var(--accent-color), 0.25);
   color: var(--background);
   transition: background 0.15s ease-in-out;
 }
 
 .widget-title>button:hover {
-  background-color: alpha(var(--text-color), 0.75);
+  background-color: alpha(var(--accent-color), 0.75);
 }
 
 /* --- DND (Do Not Disturb) Widget --- */
@@ -189,11 +190,11 @@
 }
 
 .widget-dnd switch:checked {
-  background-color: var(--border-color);
+  background-color: var(--accent-color);
 }
 
 .widget-dnd switch slider {
-  background-color: var(--border-color);
+  background-color: var(--accent-color);
   margin: 1px;
   border-radius: var(--border-radius);
   transition: background-color 0.2s ease;
@@ -236,12 +237,12 @@
   -gtk-icon-size: var(--icon-size);
   padding: 2px;
   border-radius: var(--border-radius);
-  color: alpha(var(--border-color), 0.25);
+  color: alpha(var(--accent-color), 0.25);
   transition: all 0.15s ease-in-out;
 }
 
 .notification-group .notification-group-buttons button:hover {
-  color: alpha(var(--border-color), 0.75);
+  color: alpha(var(--accent-color), 0.75);
 }
 
 .notification-group-collapse-button image {

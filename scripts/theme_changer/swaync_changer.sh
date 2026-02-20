@@ -24,7 +24,7 @@ convertToRgba() {
 }
 
 sed -e "s/__BACKGROUND_COLOR__/$(convertToRgba "$BG_HEX" "$ALPHA")/g" \
-    -e "s/__BORDER_COLOR__/$BORDER_HEX/g" \
+    -e "s/__ACCENT_COLOR__/$BORDER_HEX/g" \
     "$TEMPLATE_CSS" > "$OUTPUT_CSS"
 
 swaync-client -R
