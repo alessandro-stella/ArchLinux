@@ -161,13 +161,13 @@
   margin-left: 8px;
   padding: 4px 8px;
   border-radius: var(--border-radius);
-  background-color: alpha(var(--accent-color), 0.25);
+  background-color: alpha(var(--text-color), 0.25);
   color: var(--background);
   transition: background 0.15s ease-in-out;
 }
 
 .widget-title>button:hover {
-  background-color: alpha(var(--accent-color), 0.75);
+  background-color: alpha(var(--text-color), 0.75);
 }
 
 /* --- DND (Do Not Disturb) Widget --- */
@@ -190,11 +190,11 @@
 }
 
 .widget-dnd switch:checked {
-  background-color: var(--accent-color);
+  background-color: var(--text-color);
 }
 
 .widget-dnd switch slider {
-  background-color: var(--accent-color);
+  background-color: var(--text-color);
   margin: 1px;
   border-radius: var(--border-radius);
   transition: background-color 0.2s ease;
@@ -217,6 +217,10 @@
   transition: opacity 200ms ease-in-out;
 }
 
+.notification-group .notification {
+  border: 2px solid alpha(var(--accent-color), 0.5);
+}
+
 .notification-group .notification-group-headers {
   color: var(--text-color);
 }
@@ -237,12 +241,12 @@
   -gtk-icon-size: var(--icon-size);
   padding: 2px;
   border-radius: var(--border-radius);
-  color: alpha(var(--accent-color), 0.25);
+  color: alpha(var(--text-color), 0.25);
   transition: all 0.15s ease-in-out;
 }
 
 .notification-group .notification-group-buttons button:hover {
-  color: alpha(var(--accent-color), 0.75);
+  color: alpha(var(--text-color), 0.75);
 }
 
 .notification-group-collapse-button image {
