@@ -37,23 +37,24 @@
     "max-length": 10,
     "on-click": "kitty --title btop sh -c 'btop'"
   },
-  "disk": {
-    "interval": 30,
-    "format": "󰋊 {percentage_used}%",
-    "path": "/",
-    "tooltip": true,
-    "tooltip-format": "HDD - {used} used out of {total} on {path} ({percentage_used}%)",
-    "on-click": "kitty --title btop sh -c 'btop'"
-  },
   "memory": {
     "interval": 30,
     "format": " {}%",
     "max-length": 10,
     "tooltip": true,
-    "tooltip-format": "Memory - {used:0.1f}GB used",
+    "tooltip-format": "RAM - {used:0.1f}GB used",
+    "on-click": "kitty --title btop sh -c 'btop'"
+  },
+  "disk": {
+    "interval": 30,
+    "format": "󰋊 {percentage_used}%",
+    "path": "/",
+    "tooltip": true,
+    "tooltip-format": "{used} used out of {total}",
     "on-click": "kitty --title btop sh -c 'btop'"
   },
   "custom/updates": {
+    "tooltip": false,
     "format": " {}",
     "exec": "~/.config/waybar/scripts/update-sys",
     "on-click": "~/.config/waybar/scripts/update-sys update",
