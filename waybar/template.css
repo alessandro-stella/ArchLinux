@@ -61,6 +61,11 @@ tooltip label {
   border-radius: 7px;
 }
 
+/* Minor margin for right side tray */
+#tray {
+  margin-right: 10px;
+}
+
 /* Left-Side Rounded (Start of Group) */
 #backlight,
 #custom-launch_rofi,
